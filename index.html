@@ -3,10 +3,41 @@
   <head>
     <meta charset="utf-8">
     <title>customPRTGDesktop</title>
-    <script type="application/javascript" src="app/js/dataCluster.js">
-
+    <script type="application/javascript" src="app/js/dataStatistic.js">
     </script>
   </head>
   <body>
+    <script type="text/javascript">
+    // TODO: Pin to correct cluster then find its 95th percentil
+    // TODO: Punch the odd
+    // FIXME: Not best algorithm
+    // IDEA: Look at the ratio between summation of cluster and total data, pick the most closer result to average of dataset
+      var dummyData = [
+        3, 4, 5, 2, 4, 5, 5,
+        6, 4, 5, 3, 5, 2, 7,
+        20, 600, 30, 78, 23, 23, 43,
+        50, 68, 52, 44, 47, 55, 56
+      ]
+      var dataStatistic = new DataStatistic(dummyData)
+      var dataCluster = new DataCluster(dummyData, 5)
+      var newCluster = []
+      var result = []
+      for(k = 0; k < dataCluster.length - 1; k++){
+        let tmp = dataCluster[k]
+        if(dataStatistic.standardDeviation([dataStatistic.mean(tmp), dataStatistic.mean(dataCluster[k + 1])]) <= 5){
+          tmp = tmp.concat(dataCluster[k + 1])
+          k++
+        }
+        newCluster.push(tmp)
+      }
+      for(k = 0; k < newCluster.length - 1; k++){
+        if(dataStatistic.mean(newCluster[k]) < dataStatistic.mean(newCluster[k + 1])){
+          result = newCluster[k]
+        } else {
+          result = newCluster[k + 1]
+        }
+      }
+      console.log("Bandwidth Optimum : " + dataStatistic.percentil(result, 95) + "satuan")
+    </script>
   </body>
 </html>

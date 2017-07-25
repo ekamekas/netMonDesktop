@@ -1,12 +1,6 @@
 // Dummy data of network traffic in Mbps
 var threshold = 0.1   // +- 10% dari rerata
 var countLoop = 3     //
-var dummyData = [
-  3, 4, 5, 2, 4, 5, 5,
-  6, 4, 5, 3, 5, 2, 7,
-  20, 600, 30, 78, 23, 23, 43,
-  50, 68, 52, 44, 47, 55, 56
-]
 
 function DataStatistic(population){
   this.population = population
@@ -48,7 +42,6 @@ function DataStatistic(population){
     if(data === undefined)
       data = population
     let diffSquare = []
-    console.log(data.length)
     let i = 0
     while(i < data.length) {
       diffSquare.push(Math.pow(data[i] - this.mean(data), 2))
@@ -56,4 +49,29 @@ function DataStatistic(population){
     }
     return Math.sqrt(1/data.length * this.sum(diffSquare))
   }
+}
+
+// Mengelompokan data berdasarkan interval
+function DataCluster(population, radius){
+  let clusters = []
+  let group = []
+  let pivot = population[0]
+  this.sortedData = function(){
+    function sortNumber(a,b) {
+        return a - b
+    }
+    return population.sort(sortNumber)
+  }
+  for(i = 0; i < this.sortedData().length; i++){
+    if(this.sortedData()[i] <= pivot + radius){
+      group.push(this.sortedData()[i])
+    } else {
+      clusters.push(group)
+      group = []
+      pivot = this.sortedData()[i]
+      group.push(this.sortedData()[i])
+    }
+  }
+    clusters.push(group)  // Group terakhirs
+  return clusters
 }
