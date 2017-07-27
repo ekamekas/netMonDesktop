@@ -2,14 +2,114 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Hello!</title>
+    <title>customPRTGDesktop</title>
+    <script type="application/javascript" src="app/js/dataStatistic.js">
+    </script>
+    <script type="text/javascript" src="app/js/plotly-latest.min.js">
+
+    </script>
   </head>
   <body>
-    <form>
-      username:<br>
-      <input type="text" placeholder="username"><br>
-      password:<br>
-      <input type="password"><br>
-    </form>
+    <script type="text/javascript">
+      const VOLUME_TOTAL = 0
+      const VOLUME_IN = 2
+      const VOLUME_OUT = 4
+
+      var fs = require('fs'),
+      xml2js = require('xml2js'),
+      https = require('https'),
+      dataStatistic = require('simple-statistics')
+      var parser = new xml2js.Parser();
+
+      var trafficData = []
+      var clusteredData = []
+      var parser = new xml2js.Parser();
+      var newCluster = []
+
+      parser.on('error', function(err) { console.log('Parser error', err); });
+
+      'use strict';
+      var request = require('request');
+      var agentOptions;
+      var agent;
+      agentOptions = {
+        host: '123.231.138.149'
+      , port: '443'
+      , path: '/'
+      , rejectUnauthorized: false
+      };
+      agent = new https.Agent(agentOptions);
+
+      request({
+        url: "https://123.231.138.149/api/historicdata.xml?avg=1000&id=11734&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&username=nsc_admin&passhash=4041964660"
+      , method: 'GET'
+      , agent: agent
+      }, function (err, resp, body) {
+        if (resp.statusCode >= 200 && resp.statusCode < 400) {
+            parser.parseString(body, function(err, result) {
+              console.log(err, result)
+              for(let i = 1; i < result.histdata.item.length; i++){
+                trafficData.push(parseInt(result.histdata.item[i].value_raw[1]._/125))
+              }
+              console.log("95e : " + (new DataStatistic(trafficData).percentil(95) + new DataStatistic(trafficData).percentil(95) * 0.1) + " Kbps")
+              plot(trafficData, (resp) => {
+                console.log(resp)
+              })
+            });
+          };
+        }
+      );
+
+      // fs.readFile(__dirname + '/app/media/dataprtg/historicdata_may.xml', function(err, data) {
+      //     parser.parseString(data, function (err, result) {
+      //         for(let i = 1; i < result.histdata.item.length; i++){
+      //           trafficData.push(parseInt(result.histdata.item[i].value_raw[1]._/1000000))
+      //         }
+      //         clusteredData = dataStatistic.ckmeans(trafficData, 1/3 * trafficData.length)
+      //         // clusterMerge(clusteredData)
+      //         // bandwidthEstimation(clusteredData)
+      //         // console.log(trafficData)
+      //         console.log("Bandwidth Optimum : " + (new DataStatistic(trafficData).percentil(95) + new DataStatistic(trafficData).mean() * 0.1) + " satuan")
+      //     });
+      // });
+
+      // function clusterMerge(data){
+      //   let dataStatistic = new DataStatistic(data)
+      //   let newCluster = []
+      //   let result = []
+      //   for(k = 0; k < data.length - 1; k++){
+      //     let tmp = data[k]
+      //     if(dataStatistic.standardDeviation([dataStatistic.mean(tmp), dataStatistic.mean(data[k + 1])]) <= dataStatistic.mean(trafficData) * 0.3){
+      //       tmp = tmp.concat(data[k + 1])
+      //       k++
+      //     }
+      //     newCluster.push(tmp)
+      //   }
+      //   for(k = 0; k < newCluster.length - 1; k++){
+      //     if(dataStatistic.mean(newCluster[k]) > dataStatistic.mean(trafficData)){
+      //       result = newCluster[k]
+      //       break;
+      //     }
+      //   }
+      //   console.log("Bandwidth Optimum : " + dataStatistic.percentil(result, 95) + " satuan")
+      // }
+
+      function plot(trace){
+        TESTER = document.getElementById('tester');
+        let trace1 = {
+          x: [],
+          y: []
+        };
+        for(let i = 1; i <= trace.length; i++){
+          trace1.x.push(i)
+        }
+        trace1.y = trace
+        Plotly.plot( TESTER, [trace1], {
+      	   margin: { t: 0 },
+           title: "Bandwidth"
+           })
+      }
+    </script>
+    <div id="tester" style="width:600px;height:250px;"></div>
   </body>
 </html>

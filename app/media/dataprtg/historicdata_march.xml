@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <histdata totalcount="30" listend="1">
+   <prtg-version>17.3.32.2309</prtg-version>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1"/>
+    <value channel="Traffic Total (speed)" channelid="-1"/>
+    <value channel="Traffic In (volume)" channelid="0"/>
+    <value channel="Traffic In (speed)" channelid="0"/>
+    <value channel="Traffic Out (volume)" channelid="1"/>
+    <value channel="Traffic Out (speed)" channelid="1"/>
+    <value channel="Downtime" channelid="-4"/>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">11,513,343,438 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">11789663680278.0830</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,114,955 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">139369423.2055</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">8,255,144,491 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">8453267959191.3421</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">799,430 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">99928811.5101</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">3,258,198,946 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">3336395721086.7411</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">315,525 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">39440611.6954</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">12,145,038,441 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">12436519364090.6080</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,176,128 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">147016026.3248</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">8,437,759,558 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">8640265787155.8246</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">817,115 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">102139312.8760</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">3,707,278,884 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">3796253576934.7834</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">359,014 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">44876713.4488</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">13,857,658,196 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">14190241992638.3410</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,341,983 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">167747891.0719</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">7,917,250,817 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">8107264836420.9178</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">766,711 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">95838857.3906</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">5,940,407,379 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">6082977156217.4208</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">575,272 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">71909033.6813</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">14,522,830,886 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">14871378827197.6380</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,406,395 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">175799352.7732</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">10,715,899,761 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">10973081355078.3730</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,037,731 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">129716324.3950</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">3,806,931,125 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">3898297472119.2672</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">368,664 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">46083028.3781</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">14,757,418,920 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">15111596974327.8780</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,429,106 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">178638309.6517</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">8,416,335,938 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">8618328000895.9859</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">815,037 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">101879606.0218</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">6,341,082,982 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">6493268973431.8950</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">614,070 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">76758703.6300</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">15,124,666,468 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">15487658462851.8210</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,464,681 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">183085090.3749</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">10,776,912,642 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">11035558545098.8140</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,043,642 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">130455242.0505</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">4,347,753,826 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">4452099917753.0067</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">421,039 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">52629848.3244</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">15,200,385,723 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">15565194980130.2270</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,472,014 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">184001807.4878</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">8,572,491,246 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">8778231035586.1850</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">830,165 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">103770648.4985</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">6,627,894,477 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">6786963944544.0422</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">641,849 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">80231158.9893</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">15,653,495,458 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">16029179349342.1890</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,515,887 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">189485861.1763</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">9,345,856,746 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">9570157308049.6154</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">905,054 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">113131774.2216</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">6,307,638,712 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">6459022041292.5722</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">610,833 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">76354086.9546</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">15,822,386,384 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">16202123656900.0420</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,532,250 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">191531285.2760</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">9,690,396,213 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">9922965722365.9981</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">938,424 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">117303041.1816</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">6,131,990,170 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">6279157934534.0454</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">593,826 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">74228244.0944</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">16,131,410,825 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">16518564685165.5900</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,562,171 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">195271312.8156</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">12,313,379,985 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">12608901104928.1790</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,192,431 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">149053911.0903</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">3,818,030,840 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">3909663580237.4099</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">369,739 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">46217401.7253</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">17,146,487,890 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">17558003599442.2880</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,797,354 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">224669229.0671</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,042,360,757 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">14379377415355.3280</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,471,969 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">183996068.8057</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">3,104,127,133 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">3178626184086.9606</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">325,385 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">40673160.2615</value_raw>
+    <value channel="Downtime" channelid="-4">6 %</value>
+    <value_raw channel="Downtime" channelid="-4">5.7200</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">17,325,100,975 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">17740903398330.9660</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,677,766 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">209720702.6389</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">13,391,043,433 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">13712428475264.5550</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,296,791 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">162098855.4049</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">3,934,057,542 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">4028474923066.4083</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">380,975 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">47621847.2340</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">18,900,143,291 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">19353746730239.5420</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,830,294 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">228786757.4099</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,559,835,711 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">14909271767679.6860</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,409,978 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">176247214.0726</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">4,340,307,581 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">4444474962559.8566</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">420,316 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">52539543.3374</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">19,044,108,058 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">19501166651338.7140</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,844,230 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">230528719.1023</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,850,762,902 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">15207181211247.1490</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,438,147 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">179768321.9914</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">4,193,345,156 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">4293985440091.5661</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">406,083 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">50760397.1109</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">19,120,460,479 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">19579351530365.6670</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,851,631 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">231453812.5047</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,618,420,359 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">14969262447252.6980</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,415,652 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">176956466.5319</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">4,502,040,120 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">4610089083112.9696</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">435,979 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">54497345.9728</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">19,409,701,985 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">19875534832507.9230</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,879,641 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">234955090.5922</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,109,555,403 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">15472184732680.5380</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,463,213 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">182901672.6423</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">4,300,146,582 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">4403350099827.3830</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">416,427 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">52053417.9499</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">20,282,944,035 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">20769734692246.2020</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">1,964,205 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">245525656.7215</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,831,767,543 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">15187729964097.5940</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,436,312 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">179538998.8749</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">5,451,176,492 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">5582004728148.6086</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">527,893 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">65986657.8466</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">21,218,838,690 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">21728090818623.9460</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,689,419 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">336177412.3487</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">13,896,017,069 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">14229521478474.2880</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,761,275 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">220159412.5101</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,322,821,621 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7498569340149.6563</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">928,144 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">116017999.8386</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">21,283,424,468 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">21794226655606.7070</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,061,103 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">257637873.4328</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,103,098,519 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">14441572883270.9250</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,365,755 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">170719346.2501</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,180,325,950 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7352653772335.7824</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">695,348 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">86918527.1827</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">21,454,827,838 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">21969743705631.0340</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,077,683 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">259710394.1832</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">14,475,643,893 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">14823059345937.8780</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,401,820 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">175227469.0736</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">6,979,183,945 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7146684359693.1571</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">675,863 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">84482925.1095</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">22,384,365,930 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">22921590712256.2590</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,167,716 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">270964521.9783</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,159,873,998 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">15523710973575.1680</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,468,092 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">183511475.1017</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,224,491,932 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7397879738681.0918</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">699,624 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">87453046.8766</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">22,516,009,313 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">23056393536209.0750</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,180,464 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">272557946.6699</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,229,561,017 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">15595070480962.2180</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,474,840 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">184354954.8106</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,286,448,296 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7461323055246.8570</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">705,624 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">88202991.8593</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">22,611,838,036 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">23154522148738.7460</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,189,746 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">273718219.2609</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,689,866,337 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">16066423129074.2530</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,519,417 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">189927164.1424</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">6,921,971,699 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7088099019664.4941</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">670,328 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">83791055.1185</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">22,733,545,694 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">23279150790281.7730</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,201,515 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">275189353.7351</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,538,405,603 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">15911327337516.6780</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,504,738 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">188092251.5828</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,195,140,091 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7367823452765.0970</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">696,777 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">87097102.1523</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">23,113,638,981 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">23668366316447.4270</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,238,342 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">279792694.6067</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,709,970,345 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">16087009632917.6930</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,521,365 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">190170614.7851</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,403,668,636 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7581356683529.7331</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">716,977 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">89622079.8216</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">23,242,725,601 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">23800551014929.3280</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,250,840 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">281355033.7557</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,811,430,232 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">16190904557170.5250</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,531,189 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">191398614.9043</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,431,295,369 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7609646457758.8032</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">719,651 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">89956418.8513</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">23,344,650,983 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">23904922606442.0930</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,281,138 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">285142241.2484</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">15,806,282,044 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">16185632812814.8000</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,544,521 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">193065156.1711</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,538,368,939 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7719289793627.2973</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">736,617 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">92077085.0774</value_raw>
+    <value channel="Downtime" channelid="-4">&lt;1 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0500</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">23,610,844,509 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">24177504777438.2880</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,286,489 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">285811142.2932</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">16,587,045,028 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">16985134108850.8220</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,606,300 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">200787493.4300</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">7,023,799,481 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">7192370668587.4662</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">680,189 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">85023648.8632</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+   <item>
+    <value channel="Traffic Total (volume)" channelid="-1">25,808,260,097 KByte</value>
+    <value_raw channel="Traffic Total (volume)" channelid="-1">26427658338893.4750</value_raw>
+    <value channel="Traffic Total (speed)" channelid="-1">2,499,277 kbit/s</value>
+    <value_raw channel="Traffic Total (speed)" channelid="-1">312409628.5884</value_raw>
+    <value channel="Traffic In (volume)" channelid="0">16,925,936,825 KByte</value>
+    <value_raw channel="Traffic In (volume)" channelid="0">17332159308842.8860</value_raw>
+    <value channel="Traffic In (speed)" channelid="0">1,639,111 kbit/s</value>
+    <value_raw channel="Traffic In (speed)" channelid="0">204888885.0793</value_raw>
+    <value channel="Traffic Out (volume)" channelid="1">8,882,323,272 KByte</value>
+    <value_raw channel="Traffic Out (volume)" channelid="1">9095499030050.5856</value_raw>
+    <value channel="Traffic Out (speed)" channelid="1">860,166 kbit/s</value>
+    <value_raw channel="Traffic Out (speed)" channelid="1">107520743.5092</value_raw>
+    <value channel="Downtime" channelid="-4">0 %</value>
+    <value_raw channel="Downtime" channelid="-4">0.0000</value_raw>
+   </item>
+  </histdata>

@@ -3,41 +3,83 @@
   <head>
     <meta charset="utf-8">
     <title>customPRTGDesktop</title>
-    <script type="application/javascript" src="app/js/dataStatistic.js">
+    <script type="application/javascript" src="app/js/utility.js">
+    </script>
+    <script type="text/javascript" src="app/js/dataStatistic.js">
+    </script>
+    <script type="text/javascript" src="app/js/plotly-latest.min.js">
     </script>
   </head>
   <body>
+    Sensor:
+    <input id="api_sensor" type="text" placeholder="API" value="11734"/><br>
+    Interval:
+    <input id="api_interval" type="text" placeholder="API" value=60 />
+    (minutes)<br>
+    <button id="api_button" type="button" name="button">Process</button>
+    <br>
+    <div id="graph_1" style="width:600px;height:250px;">
+    </div>
+    <div id="graph_2" style="width:600px;height:250px;">
+    </div>
+    <p id="result"></p>
     <script type="text/javascript">
-    // TODO: Pin to correct cluster then find its 95th percentil
-    // TODO: Punch the odd
-    // FIXME: Not best algorithm
-    // IDEA: Look at the ratio between summation of cluster and total data, pick the most closer result to average of dataset
-      var dummyData = [
-        3, 4, 5, 2, 4, 5, 5,
-        6, 4, 5, 3, 5, 2, 7,
-        20, 600, 30, 78, 23, 23, 43,
-        50, 68, 52, 44, 47, 55, 56
-      ]
-      var dataStatistic = new DataStatistic(dummyData)
-      var dataCluster = new DataCluster(dummyData, 5)
-      var newCluster = []
-      var result = []
-      for(k = 0; k < dataCluster.length - 1; k++){
-        let tmp = dataCluster[k]
-        if(dataStatistic.standardDeviation([dataStatistic.mean(tmp), dataStatistic.mean(dataCluster[k + 1])]) <= 5){
-          tmp = tmp.concat(dataCluster[k + 1])
-          k++
-        }
-        newCluster.push(tmp)
+      const HOST = "https://123.231.138.149/api/historicdata.xml?sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&"
+      const USERNAME = "nsc_admin"
+      const PASSHASH = "4041964660"
+
+      var trafficData
+
+      document.getElementById("api_button").onclick = function(){
+        new Utility().getXML(HOST + "&id=" + document.getElementById("api_sensor").value.toString() + "&avg=" + (document.getElementById("api_interval").value * 60).toString() + "&username=" + USERNAME + "&passhash=" + PASSHASH, (result) => {
+          if(result !== null){
+            trafficData = []
+            console.log(result)
+            for(let i = 1; i < result.histdata.item.length; i++){
+              trafficData.push(parseInt(result.histdata.item[i].value_raw[1]._/125))
+            }
+            let sortedTraffic = new DataStatistic().sortedData(trafficData.slice())
+            let data_95e = new DataStatistic().percentil(95, sortedTraffic)
+            // Plot data
+            var layout = {
+              title: 'Estimation peak bandwidth',
+              yaxis: {
+                title: 'Speed (Kbps)',
+                titlefont: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f'
+                }
+              }
+            };
+            let data = {
+              x: [],
+              y: [],
+              name: "data"
+            };
+            let estimasi = {
+              x: [0, sortedTraffic.length],
+              y: [data_95e, data_95e],
+              name: "estimation"
+            };
+            for(let i = 1; i <= trafficData.length; i++){
+              data.x.push(i)
+            }
+            data.y = trafficData
+            Plotly.plot(document.getElementById('graph_1'), [data, estimasi], {
+          	   margin: { t: 0 },
+               title: "Bandwidth"
+            })
+            data.y = sortedTraffic
+            Plotly.plot(document.getElementById('graph_2'), [data], {
+          	   margin: { t: 0 },
+               title: "Bandwidth"
+            })
+            document.getElementById("result").appendChild(document.createTextNode("Estimasi bandwidth peak : " + data_95e + " Kbps"))
+          }
+        })
+
       }
-      for(k = 0; k < newCluster.length - 1; k++){
-        if(dataStatistic.mean(newCluster[k]) < dataStatistic.mean(newCluster[k + 1])){
-          result = newCluster[k]
-        } else {
-          result = newCluster[k + 1]
-        }
-      }
-      console.log("Bandwidth Optimum : " + dataStatistic.percentil(result, 95) + "satuan")
     </script>
   </body>
 </html>

@@ -31,7 +31,7 @@ function DataStatistic(population){
     return this.sum(data)/data.length
   }
 
-  this.percentil = function(data, k){
+  this.percentil = function(k, data){
     if(data === undefined)
       data = population
     let sortedData = this.sortedData(data)
