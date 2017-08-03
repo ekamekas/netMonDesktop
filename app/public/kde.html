@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Kernel Density Estimation</title>
+    <script type="text/javascript" src="../js/d3.min.js"></script>
+    <script type="text/javascript" src="../js/science.v1.min.js"></script>
+    <script type="text/javascript" src="../js/utility.js"></script>
+    <script type="text/javascript" src="../js/dataStatistic.js"></script>
+  </head>
+  <body>
+    <!-- <script type="text/javascript">
+    const HOST = "https://123.231.138.149/api/historicdata.xml?"
+    const USERNAME = "nsc_admin"
+    const PASSHASH = "4041964660"
+
+    var trafficData = []
+
+    // new Utility().getXML(HOST + "id=11734" + "&sdate=2017-06-01-00-00-00" + "&edate=2017-06-30-00-00-00" + "&username=" + USERNAME + "&passhash=" + PASSHASH, (data) => {
+    new Utility().getXML("https://123.231.138.149/api/historicdata.xml?id=11734&avg=3600&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&username=nsc_admin&passhash=4041964660", function(data) {
+      for(let i = 1; i < data.histdata.item.length; i++){
+        trafficData.push(parseInt(data.histdata.item[i].value_raw[1]._/125))
+      }
+      var test = science.stats.kde().sample(trafficData)
+      console.log(test)
+    })
+    </script> -->
+    </script>
+    <script type="text/javascript">
+    var trafficData = []
+
+    // new Utility().getXML(HOST + "id=11734" + "&sdate=2017-06-01-00-00-00" + "&edate=2017-06-30-00-00-00" + "&username=" + USERNAME + "&passhash=" + PASSHASH, (data) => {
+    new Utility().getXML("https://123.231.138.149/api/historicdata.xml?id=11734&avg=3600&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&username=nsc_admin&passhash=4041964660", function(data) {
+      for(let i = 1; i < data.histdata.item.length; i++){
+        trafficData.push(parseInt(data.histdata.item[i].value_raw[1]._/125))
+      }
+    })
+
+    function kde(sample) {
+    /* Epanechnikov kernel */
+      function epanechnikov(u) {
+        return Math.abs(u) <= 1 ? 0.75 * (1 - u*u) : 0;
+      };
+
+      var kernel = epanechnikov;
+      return {
+        scale: function(h) {
+          kernel = function (u) { return epanechnikov(u / h) / h; };
+          return this;
+        },
+
+        points: function(points) {
+          let result = []
+          for(i = 0; i < points.length; i++){
+            console.log("Process")
+            let sum = 0
+            for(j = 0; j <= sample.length; j++){
+              console.log("Cua")
+              sum = sum + kernel(points[i] - sample[j])
+            }
+            result.push({x:points[i], y:sum})
+          }
+          console.log(result)
+          // return points.map(function(x) {
+          //   var y =
+          //   var y = d3.sum(sample.map(function (v) {
+          //     return kernel(x - v);
+          //   })) / sample.length;
+          //   return {x: x, y: y};
+          // });
+        }
+      }
+    }
+    </script>
+  </body>
+</html>

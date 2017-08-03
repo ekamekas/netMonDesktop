@@ -11,12 +11,22 @@
     </script>
   </head>
   <body>
+    URI:
+    <input id="api_host" type="text" name="" value="https://123.231.138.149/api/historicdata.xml?" />
+    <br>
+    dateFrom:
+    <input id="api_date_from" type="text" placeholder="API" value="2017-06-01-00-00-00"/>
+    <br>
+    dateto
+    <input id="api_date_to" type="text" placeholder="API" value="2017-06-30-00-00-00"/>
+    <br>
     Sensor:
     <input id="api_sensor" type="text" placeholder="API" value="11734"/><br>
     Interval:
     <input id="api_interval" type="text" placeholder="API" value=60 />
     (minutes)<br>
     <button id="api_button" type="button" name="button">Process</button>
+    <p><a href="app/public/kde.html">Test KDE</a> <a href="app/public/test.html">Test Cluster</a> <a href="app/public/testExp.html"> Test Exp</a></p>
     <br>
     <div id="graph_1" style="width:600px;height:250px;">
     </div>
@@ -24,17 +34,16 @@
     </div>
     <p id="result"></p>
     <script type="text/javascript">
-      const HOST = "https://123.231.138.149/api/historicdata.xml?sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&"
+      // const HOST = "https://123.231.138.149/api/historicdata.xml?"
       const USERNAME = "nsc_admin"
       const PASSHASH = "4041964660"
 
       var trafficData
 
       document.getElementById("api_button").onclick = function(){
-        new Utility().getXML(HOST + "&id=" + document.getElementById("api_sensor").value.toString() + "&avg=" + (document.getElementById("api_interval").value * 60).toString() + "&username=" + USERNAME + "&passhash=" + PASSHASH, (result) => {
+        new Utility().getXML(document.getElementById("api_host").value.toString() + "sdate=" + document.getElementById("api_date_from").value.toString() + "&edate=" + document.getElementById("api_date_to").value.toString() + "&id=" + document.getElementById("api_sensor").value.toString() + "&avg=" + (document.getElementById("api_interval").value * 60).toString() + "&username=" + USERNAME + "&passhash=" + PASSHASH, (result) => {
           if(result !== null){
             trafficData = []
-            console.log(result)
             for(let i = 1; i < result.histdata.item.length; i++){
               trafficData.push(parseInt(result.histdata.item[i].value_raw[1]._/125))
             }
@@ -71,11 +80,13 @@
                title: "Bandwidth"
             })
             data.y = sortedTraffic
-            Plotly.plot(document.getElementById('graph_2'), [data], {
+            Plotly.plot(document.getElementById('graph_2'), [data, estimasi], {
           	   margin: { t: 0 },
                title: "Bandwidth"
             })
-            document.getElementById("result").appendChild(document.createTextNode("Estimasi bandwidth peak : " + data_95e + " Kbps"))
+            document.getElementById("result").appendChild(document.createTextNode("95 persentil : " + data_95e + " Kbps"))
+            document.getElementById('result').appendChild(document.createElement('p')).appendChild(document.createTextNode("Max : " + sortedTraffic[sortedTraffic.length - 1] + " Kbps"))
+            document.getElementById('result').appendChild(document.createElement('p')).appendChild(document.createTextNode("min : " + sortedTraffic[0] + " Kbps"))
           }
         })
 
