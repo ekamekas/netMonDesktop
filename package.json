@@ -1,14 +1,11 @@
 {
-  "name": "customPRTGDesktop",
+  "name": "Installer",
   "version": "0.0.1",
-  "main": "main.js",
-  "dependencies": {
-    "density-clustering": "^1.3.0",
-    "eyes": "^0.1.8",
-    "plotly": "^1.0.6",
-    "request": "^2.81.0",
-    "simple-statistics": "^4.1.0",
-    "xml2js": "^0.4.17",
-    "xml2json": "^0.11.0"
+  "scripts": {
+    "createInstaller": "node ./install.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron-winstaller": "^2.6.3"
   }
 }

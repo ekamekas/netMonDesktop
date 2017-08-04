@@ -1,0 +1,5 @@
+https://123.231.138.149/api/historicdata.xml?id=11734&avg=3600&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&username=nsc_admin&passhash=4041964660
+
+https://123.231.138.149/api/chart.png?id=11734&avg=15&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&width=1024&height=350&graphstyling=baseFontSize='12'%20showLegend='1'&graphid=-1&username=nsc_admin&passhash=4041964660
+
+https://123.231.138.149/api/table.xml?content=sensortree&username=nsc_admin&passhash=4041964660

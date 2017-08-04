@@ -1,0 +1,15 @@
+{
+  "name": "customPRTGDesktop",
+  "version": "0.0.1",
+  "main": "main.js",
+  "scripts": {
+    "createInstaller": "node ./install.js"
+  },
+  "dependencies": {
+    "plotly": "^1.0.6",
+    "request": "^2.81.0",
+    "xml2js": "^0.4.17",
+    "xml2json": "^0.11.0"
+  },
+  "devDependencies": {}
+}
