@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test Pengelompokan</title>
+    <script type="text/javascript" src="../js/dataStatistic.js">
+    </script>
+    <script type="text/javascript" src="../js/utility.js">
+    </script>
+    <script type="text/javascript" src="../js/plotly-latest.min.js">
+    </script>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Malala Pala Kula Dina Uph La Mana Taya</h1>
+      <p><a href="../../index.html">Home</a></p>
+      <button type="button" id="openFile">Load xml File</button>
+      <button type="button" id="button">Proses</button>
+      <br>
+    </div>
+    <br>
+    <script type="text/javascript">
+    var path = require('path'),
+    url = require('url'),
+    {dialog} = require('electron').remote
+    var sensorRows
+    var href
+    document.getElementById("openFile").onclick = () => {
+      dialog.showOpenDialog({filters:[{name:'XML File', extensions: ['xml']}]}, (filename) => {
+        href = new Utility().windowsSlash("file://" + filename[0]).toString()
+        console.log(href)
+      })
+    }
+    document.getElementById("button").onclick = () => {
+      dialog.showSaveDialog({filters:[{name:'XML File', extensions: ['xml']}, {name:'others', extensions:['*']}]},(filename) => {
+        console.log(filename)
+        new Utility().getXML(href, (result) => {
+          console.log(result, "Result")
+          exportData(result, filename)
+        })
+      })
+    }
+
+    function exportData(data, outputfile, template){
+      if(outputfile === undefined)
+        outputfile = __dirname + "result.xml"
+      outputfile = new Utility().windowsSlash(outputfile)
+      if(template === undefined)
+        template = path.join(__dirname, "../", "media/excelTemplate.xml")
+      template = new Utility().windowsSlash("file://" + template)
+      new Utility().getXML(template, (result) => {
+        console.log("Proses sedang berjalan");
+        template = result
+        if(data !== undefined && data.sensors.$.totalcount != 0){
+          try{
+            let dataKeys = Object.keys(data.sensors.item[0])  // Get sample keys
+            template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedRowCount"] = data.sensors.$.totalcount    // Assign metadata of row counts
+            template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedColumnCount"] = dataKeys.length + 1   // Assign metadata of column counts (with number column)
+            template.Workbook.Worksheet[0].Table[0]["Row"] = []   // Declare new attribute
+            // Start loopy
+            for(let i = 0; i < data.sensors.item.length; i++){
+              let cell = []
+              for(let j = 0; j < dataKeys.length + 1; j++){
+                if(j == 0){
+                  cell.push({
+                    "$":{
+                      "ss:MergedDown":1
+                    },
+                    "Data":[
+                      {
+                        "$":{
+                          "ss:Type":"String"
+                        },
+                        "_":i
+                      }
+                    ]
+                  })
+                } else {
+                  cell.push({
+                    "$":{
+                      "ss:MergedDown":1
+                    },
+                    "Data":[
+                      {
+                        "$":{
+                          "ss:Type":"String"
+                        },
+                        "_":data.sensors.item[i][dataKeys[j - 1]][0]
+                      }
+                    ]
+                  })
+                }
+              }
+              template.Workbook.Worksheet[0].Table[0]["Row"].push({Cell:cell})
+            }
+            // End loopy
+            console.log(template, "Result")
+            // Write to file
+            new Utility().writeXML(template, outputfile, () => {
+              console.log("File berhasil disimpan");
+              console.log("Path : " + outputfile)
+            })
+          } catch(err){
+            console.log(err)
+          }
+        }
+      })
+    }
+    </script>
+  </body>
+</html>

@@ -3,3 +3,23 @@ https://123.231.138.149/api/historicdata.xml?id=11734&avg=3600&sdate=2017-06-01-
 https://123.231.138.149/api/chart.png?id=11734&avg=15&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&width=1024&height=350&graphstyling=baseFontSize='12'%20showLegend='1'&graphid=-1&username=nsc_admin&passhash=4041964660
 
 https://123.231.138.149/api/table.xml?content=sensortree&username=nsc_admin&passhash=4041964660
+
+Ambil sensor berdasarkan group
+https://123.231.138.149/api/table.json?content=sensors&output=json&columns=objid,group,sensor&id=100176&username=nsc_admin&passhash=4041964660
+
+List perangkat berdasarkan group
+https://123.231.138.149/api/table.json?content=devices&output=json&columns=objid,name,group&id=100176&username=nsc_admin&passhash=4041964660
+
+List group
+https://123.231.138.149/api/table.json?content=groups&columns=objid,group&count=10000&username=nsc_admin&passhash=4041964660
+
+Ambil list sensor types
+https://123.231.138.149/api/sensortypesinuse.json?username=nsc_admin&passhash=4041964660
+
+Ambil list berdasarkan parent
+https://123.231.138.149/api/table.json?content=sensor&columns=objid,group,probe,parentid&filter_parentid=0&id=0&username=nsc_admin&count=750&passhash=4041964660
+
+https://123.231.138.149/api/table.xml?content=group&columns=objid,name&filter_parentid=0&id=0&username=nsc_admin&count=750&passhash=4041964660
+
+Cari perangakt berdasarkan PARAMETER
+https://123.231.138.149/api/table.json?content=devices&columns=objid,device&filter_device=@sub(/*PARAMETER*/)&username=nsc_admin&passhash=4041964660

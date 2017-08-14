@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test Pengelompokan</title>
+    <script type="text/javascript" src="../js/dataStatistic.js">
+    </script>
+    <script type="text/javascript" src="../js/utility.js">
+    </script>
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js">
+    </script>
+    <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="../js/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../js/plugins/jqplot.dragable.js"></script>
+    <script type="text/javascript" src="../js/plugins/jqplot.canvasOverlay.js"></script>
+    <link rel="stylesheet" type="text/css" href="../js/jquery.jqplot.css" />
+  </head>
+  <body>
+    <div id="container">
+      <h1>Malala Pala Kula Dina Uph La Mana Taya</h1>
+      <p><a href="../../index.html">Home</a></p>
+      <p>List Sensor berdasarkan : </p>
+      <p>Group</p>
+      <select id="dropdown_groups">
+        <option value="">Pilih</option>
+      </select>
+      <p>Sensors Type</p>
+      <select id="dropdown_types" name="">
+        <option value="">Pilih</option>
+      </select>
+      <button type="button" id="button">Proses</button>
+      <br>
+      <div id="api" style="display:none">
+        <select id="dropdown_sensors" name="" style="max-height:250px;overflow:auto;">
+        </select>
+        <br>
+        dateFrom:
+        <input id="api_date_from" type="text" placeholder="API" value="2017-06-01-00-00-00"/>
+        <br>
+        dateto
+        <input id="api_date_to" type="text" placeholder="API" value="2017-06-30-00-00-00"/>
+        <br>
+        Interval:
+        <input id="api_interval" type="text" placeholder="API" value=60 />
+        (minutes)<br>
+        <button id="api_button" type="button">Ambil data</button>
+        <br>
+        <select style="display:none" id="dropdown_channels" name="channels">
+        </select>
+      </div>
+    </div>
+    <br>
+    <div id="graph" style="display:none">
+      <div>
+        <div id="graph_1" style="float:left;width:600px;height:250px;">
+        </div>
+        <button type="button" name="up" onclick="lineup">Up</button>
+        <button type="button" name="down" onclick="linedown">Down</button>
+      </div>
+      <p id="result"></p>
+    </div>
+    <script type="text/javascript">
+    var plot
+    var data
+    var sensortypes
+    var groups
+    // document.getElementById("tag").onclick = () =>{
+    //   let link = "file:///media/MasEka/MasEka/Veritas. Probitas. Iustitia/Proyek/customPRTGDesktop/resources/app/app/media/dataprtg/table.xml"
+    //   new Utility().getXML(link, (result) => {
+    //     data = result
+    //     usedtags = new UsedTags().getUsedtags(data.prtg.options[0].usedtags[0])
+    //     console.log("Parantos yeuh !")
+    //     document.getElementById("content").innerHTML = '<select id="dropdown_tags"></select>'
+    //     for(let i = 0; i < usedtags.length; i++){
+    //       let element = document.createElement("option")
+    //       element.value = usedtags[i]
+    //       element.innerHTML = usedtags[i]
+    //       element.className = "usedtags"
+    //       document.getElementById("dropdown_tags").appendChild(element)
+    //     }
+    //   })
+    // }
+
+    function displayGroup(objid, name){
+      if(objid != 0){
+        document.getElementById('dropdown_groups').innerHTML = '<option class="groups" value=0>Root</option>'
+      } else {
+        document.getElementById('dropdown_groups').innerHTML = ''
+      }
+      new Utility().getXML("https://123.231.138.149/api/table.xml?content=group&columns=objid,name,parentid&filter_parentid=" + objid + "&id=" + objid + "&username=nsc_admin&count=750&passhash=4041964660", (result) =>{
+        groups = result.group
+        let element = document.createElement("option")
+        element.value = objid
+        element.innerHTML = name
+        element.selected = "selected"
+        element.className = "groups"
+        document.getElementById("dropdown_groups").appendChild(element)
+        for(let i = 0; i < groups.item.length; i++){
+          let element = document.createElement("option")
+          element.value = groups.item[i].objid
+          element.innerHTML = groups.item[i].name
+          element.parent = objid
+          element.className = "groups"
+          document.getElementById("dropdown_groups").appendChild(element)
+        }
+      })
+    }
+
+    function displaySensor(){
+      new Utility().getJSON("https://123.231.138.149/api/sensortypesinuse.json?username=nsc_admin&passhash=4041964660", (result) =>{
+        sensortypes = result.types
+        console.log(sensortypes)
+        console.log("Parantos yeuh !")
+        for(let i = 0; i < sensortypes.length; i++){
+          let element = document.createElement("option")
+          element.value = Object.keys(sensortypes[i])
+          element.innerHTML = sensortypes[i][Object.keys(sensortypes[i])]
+          element.className = "sensortypes"
+          document.getElementById("dropdown_types").appendChild(element)
+        }
+      })
+    }
+
+    displayGroup(0, "Root")
+    displaySensor()
+
+    document.getElementById('dropdown_types').onclick = () =>{
+      console.log(document.getElementById('dropdown_types').options[document.getElementById('dropdown_types').selectedIndex].value)
+    }
+
+    document.getElementById('dropdown_groups').onclick = () =>{
+      if(groups.$.totalcount != 0){
+          displayGroup(document.getElementById('dropdown_groups').options[document.getElementById('dropdown_groups').selectedIndex].value, document.getElementById('dropdown_groups').options[document.getElementById('dropdown_groups').selectedIndex].innerHTML)
+      }
+    }
+
+    document.getElementById("button").onclick = () => {
+      new Utility().getXML("https://123.231.138.149/api/table.xml?content=sensor&columns=objid,device,group&filter_type=" + document.getElementById('dropdown_types').value + "&id=" + document.getElementById('dropdown_groups').value + "&username=nsc_admin&count=750&passhash=4041964660", (result) =>{
+        let sensors = result.sensor
+        console.log("Parantos yeuh !")
+        document.getElementById('dropdown_sensors').innerHTML = '<option value="">List Sensors</option>'
+        if(sensors.$.totalcount != 0){
+          for(let i = 0; i < sensors.item.length; i++){
+            let element = document.createElement("option")
+            element.value = sensors.item[i].objid
+            element.innerHTML = sensors.item[i].device
+            element.className = "sensors"
+            document.getElementById("dropdown_sensors").appendChild(element)
+          }
+        }
+        console.log("https://123.231.138.149/api/table.xml?content=sensor&columns=objid,name,group&filter_type=" + document.getElementById('dropdown_types').value + "&id=" + document.getElementById('dropdown_groups').value + "&username=nsc_admin&count=750&passhash=4041964660")
+        document.getElementById("api").style.display = "block"
+      })
+    }
+
+    document.getElementById("api_button").onclick = () => {
+      new Utility().getXML("https://123.231.138.149/api/historicdata.xml?&id=" + document.getElementById("dropdown_sensors").value.toString() + "&avg=" + (document.getElementById("api_interval").value * 60).toString() + "&sdate=" + document.getElementById("api_date_from").value.toString() + "&edate=" + document.getElementById("api_date_to").value.toString() + "&username=nsc_admin&passhash=4041964660", (result) =>{
+        console.log(document.getElementById("dropdown_sensors").value.toString(), "Sensor ID")
+        if(result.histdata.$.totalcount != 0){
+          document.getElementById("dropdown_channels").innerHTML = ''
+          for(let i = 0; i < result.histdata.item[0].value.length; i++){
+            let element = document.createElement("option")
+            element.value = i
+            element.innerHTML = result.histdata.item[0].value[i].$.channel
+            element.className = "channels"
+            document.getElementById("dropdown_channels").appendChild(element)
+          }
+          document.getElementById("dropdown_channels").style.display = "block"
+        }
+        document.getElementById("dropdown_channels").onclick = () => {
+          console.log(document.getElementById("dropdown_channels").value, "Index")
+          console.log(result, "Hasil")
+          let trafficData = []
+        let sortedData = []
+        let selectedIndex = 0       //selectedIndex adalah nilai yang menentukan current index pada selectedData
+        let selectedData = []       //selectedData menyimpan nilai rawData yang terkategori sebagai peak
+        let indicator = 1           //indicator mengindikasikan suatu nilai rawData untuk diproses atau diabaikan (genap atau ganjil)
+
+        for(let i = 1; i < result.histdata.item.length; i++){
+          trafficData.push(parseInt(result.histdata.item[i].value_raw[document.getElementById("dropdown_channels").value]._/125))
+        }
+
+        var dataSize = trafficData.length     //dataSize menyimpan nilai ukuran array
+
+        for (let i = 0; i <= trafficData.length - 1; i++){
+          if (i != 0 && i != trafficData.length - 1){                         //jika urutan data sekarang bukan data pertama dan bukan data terakhir
+            if (indicator == 1 && i%2 != 0){                        //jika terindikasi urutan data sekarang merupakan urutan yang ganjil
+              if (trafficData[i] >= trafficData[i-1] && trafficData[i] >= trafficData[i+1]){   //jika terindikasi data sekarang lebih besar sama dengan data sebelum dan sesudahnya
+                sortedData.push(trafficData[i])
+                indicator = 0
+              }
+            } else if (indicator == 0 && i%2 == 0){                //jika terindikasi data sekarang lebih besar sama dengan data sebelum dan sesudahnya
+              if (trafficData[i] >= trafficData[i-1] && trafficData[i] >= trafficData[i+1]){
+                sortedData.push(trafficData[i])
+                indicator = 1
+              }
+            }
+          } else if (i == 0){                                        //jika terindikasi urutan data sekarang adalah urutan pertama
+              if (trafficData[i] >= trafficData[i+1]){     //jika terindikasi data sekarang lebih besar sama dengan data sebelum dan sesudahnya
+                sortedData.push(trafficData[i])
+              }
+          }else{                                                   //jika terindikasi urutan data sekarang adalah urutan terakhir
+            if (trafficData[i] >= trafficData[i-1]){     //jika terindikasi data sekarang lebih besar sama dengan data sebelum dan sesudahnya
+                sortedData.push(trafficData[i])
+            }
+          }
+        }
+        console.log(new DataStatistic(sortedData).sortedData())
+        var x = []                                          //x menyimpan nilai 1 sampai dataSize untuk memudahkan regresi
+        for (let i = 0; i <= sortedData.length - 1; i++){            //pengisian nilai variable x
+          x[i] = i+1
+        }
+
+        var clusterMemberNumber = 0                         //urutan data dalam cluster sekarang
+        var clusterNumber = 0                               //urutan cluster sekarang
+        var firstMemberIndex = 0                            //urutan data pada variable y yang menjadi data pertama pada cluster sekarang
+        var clusteredData = [[]]                            //clusteredData menyimpan data yang telah terkelompok
+        clusteredData[0][0] = sortedData[0]
+
+        var error = 1                                       //nilai error data sekarang terhadap data hasil regresi
+        var errorTotal = 1                                  //rata-rata error dari clusteredData sekarang terhadap y
+
+
+        for (i = 1; i <= sortedData.length - 1; i++){
+          var y_new = []                                    //data hasil regresi
+          sum_x = 0
+          sum_y = 0
+          sum_xy = 0
+          sum_x2 = 0
+
+          if (clusterMemberNumber <= 2){                    //3 data awal tiap cluster menjadi acuan penentuan data hasil regresi
+            for (j = firstMemberIndex; j <= i; j++){
+                sum_x = sum_x + x[j]
+                sum_y = sum_y + sortedData[j]
+                sum_xy = sum_xy + x[j]*sortedData[j]
+                sum_x2 = sum_x2 + Math.pow(x[j], 2)
+            }
+
+            a1 = (((i + 1 - firstMemberIndex)*sum_xy) - (sum_x*sum_y))/(((i + 1 - firstMemberIndex)*sum_x2) - Math.pow(sum_x, 2))
+            a0 = ((sum_y*sum_x2) - (sum_x*sum_xy))/(((i + 1 - firstMemberIndex)*sum_x2) - Math.pow(sum_x, 2))
+            k = 0
+            for (j = firstMemberIndex; j <= i; j++){
+              y_new[k] = a1*x[j] + a0                       //penentuan nilai-nilai data hasil regresi sekarang
+              clusteredData[clusterNumber][j] = y_new[k]    //pengisian data hasil regresi ke clusteredData
+              k = k + 1
+            }
+            clusterMemberNumber = clusterMemberNumber + 1
+          } else{                                         //jika pada cluster, urutan data sudah melewati 3, maka lakukan regresi untuk mengecek errornya terhadap data hasil regresi sekarang
+            for (j = firstMemberIndex; j <= i; j++){
+                sum_x = sum_x + x[j]
+                sum_y = sum_y + sortedData[j]
+                sum_xy = sum_xy + x[j]*sortedData[j]
+                sum_x2 = sum_x2 + Math.pow(x[j], 2)
+            }
+
+            a1 = (((i + 1 - firstMemberIndex)*sum_xy) - (sum_x*sum_y))/(((i + 1 - firstMemberIndex)*sum_x2) - Math.pow(sum_x, 2))
+            a0 = ((sum_y*sum_x2) - (sum_x*sum_xy))/(((i + 1 - firstMemberIndex)*sum_x2) - Math.pow(sum_x, 2))
+            k = 0
+            for (j = firstMemberIndex; j <= i; j++){
+              y_new[k] = a1*x[j] + a0
+              k = k + 1
+            }
+            k = 0
+            errorTotal = 0;
+            comparedIndex = y_new.length - 1
+            for (j = firstMemberIndex; j <= i - 1; j++){
+              errorTotal = errorTotal + Math.abs(sortedData[j] - y_new[k])
+              k = k + 1
+            }
+            errorTotal = errorTotal/(i - firstMemberIndex)
+            error = Math.abs(sortedData[i] - y_new[comparedIndex])
+
+            if (error <= errorTotal){                     //jika error data sekarang terhadap data hasil regresi kurang dari rata-rata seluruh error data hasil regresi sekarang, maka data dimasukkan ke dalam satu cluster
+              comparedIndex = y_new.length - 1
+              k = 0
+              for (j = firstMemberIndex; j <= i; j++){
+                clusteredData[clusterNumber][j] = y_new[k]
+                k = k + 1
+              }
+              clusterMemberNumber = clusterMemberNumber + 1
+            } else{                                       //jika error lebih dari error rata-rata seluruh data hasil regresi, maka data sekarang menjadi data pertama di cluster berikutnya
+              clusteredData.push([])
+              clusterNumber = clusterNumber + 1
+              clusteredData[clusterNumber][i] = sortedData[i]
+              clusterMemberNumber = 0
+              firstMemberIndex = i
+            }
+          }
+        }
+        effectiveBandwidth = clusteredData[clusteredData.length - 3][clusteredData[clusteredData.length - 3].length - 1]      //nilai hasil estimasi
+        console.log(effectiveBandwidth)
+
+        // Plot data
+        // var layout = {
+        //   title: 'Estimation peak bandwidth',
+        //   yaxis: {
+        //     title: 'Speed (Kbps)',
+        //     titlefont: {
+        //       family: 'Courier New, monospace',
+        //       size: 18,
+        //       color: '#7f7f7f'
+        //     }
+        //   }
+        // };
+        // let data = {
+        //   x: [],
+        //   y: [],
+        //   name: "data"
+        // };
+        // let estimasi = {
+        //   x: [0, trafficData.length],
+        //   y: [effectiveBandwidth, effectiveBandwidth],
+        //   name: "estimation"
+        // };
+        // for(let i = 1; i <= trafficData.length; i++){
+        //   data.x.push(i)
+        // }
+        // data.y = trafficData
+        // Plotly.newPlot(document.getElementById('graph_1'), [data, estimasi], {
+        //    margin: { t: 0 },
+        //    title: "Bandwidth"
+        // })
+        // data.y = new DataStatistic(trafficData).sortedData()
+        // Plotly.newPlot(document.getElementById('graph_2'), [data, estimasi], {
+        //    margin: { t: 0 },
+        //    title: "Bandwidth"
+        // })
+        let data = []
+        for(let i = 1; i <= trafficData.length; i++){
+          data.push([i,trafficData[i-1]])
+        }
+        console.log(data)
+        plot = $.jqplot('graph_1', [data], {
+          legend: {show:false},
+          seriesDefaults: {
+            rendererOptions: {
+                smooth: true
+            }
+          },
+          series:[
+            {
+              lineWidth:1,
+            }
+          ],
+          axes:{
+            xaxis:{
+              label : "Bins"
+            },
+            yaxis:{
+              label:'Satuan'
+            }
+          },
+          canvasOverlay: {
+            show: true,
+            objects: [
+                {horizontalLine: {
+                    name: 'Noki',
+                    y: effectiveBandwidth,
+                    lineWidth: 2,
+                    xOffset:0,
+                    color: 'rgb(50, 55, 30)',
+                    shadow: false,
+                }}
+            ],
+            options:{
+              isDragable:true
+            }
+          }
+        });
+        document.getElementById("graph").style.display = "block"
+        document.getElementById("result").innerHTML = '<p>Dominan Puncak : ' + effectiveBandwidth + ' Kbps</p><p>Max : ' + sortedData[sortedData.length - 1] + ' Kbps</p><p>min : ' + sortedData[0] + ' Kbps</p>'
+        }
+      })
+    }
+    function lineup() {
+      var co = plot1.plugins.canvasOverlay;
+      var line = co.get('fred');
+      line.options.y += effectiveBandwidth * 0.1;
+      co.draw(plot1);
+    }
+
+    function linedown() {
+      var co = plot1.plugins.canvasOverlay;
+      var line = co.get('fred');
+      line.options.y -= effectiveBandwidth * 0.1;
+      co.draw(plot1);
+    }
+    </script>
+  </body>
+</html>

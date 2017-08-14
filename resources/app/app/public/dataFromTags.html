@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test Pengelompokan</title>
+    <script type="text/javascript" src="../js/dataStatistic.js">
+    </script>
+    <script type="text/javascript" src="../js/utility.js">
+    </script>
+    <script type="text/javascript" src="../js/plotly-latest.min.js">
+    </script>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Malala Pala Kula Dina Uph La Mana Taya</h1>
+      <p><a href="../../index.html">Home</a></p>
+      <p>List Sensor berdasarkan : </p>
+      <p>Group</p>
+      <select id="dropdown_groups">
+        <option value="">Pilih</option>
+      </select>
+      <p>Sensors Type</p>
+      <select id="dropdown_types" name="">
+        <option value="">Pilih</option>
+      </select>
+      <button type="button" id="button">Proses</button>
+      <br>
+      <div id="api" style="display:none">
+        <select id="dropdown_sensors" name="" style="max-height:250px;overflow:auto;">
+        </select>
+        <br>
+        dateFrom:
+        <input id="api_date_from" type="text" placeholder="API" value="2017-06-01-00-00-00"/>
+        <br>
+        dateto
+        <input id="api_date_to" type="text" placeholder="API" value="2017-06-30-00-00-00"/>
+        <br>
+        Interval:
+        <input id="api_interval" type="text" placeholder="API" value=60 />
+        (minutes)<br>
+        <button id="api_button" type="button">Ambil data</button>
+        <br>
+        <select style="display:none" id="dropdown_channels" name="channels">
+        </select>
+      </div>
+    </div>
+    <br>
+    <div id="graph">
+      <div id="graph_1" style="width:600px;height:250px;">
+      </div>
+      <div id="graph_2" style="width:600px;height:250px;">
+      </div>
+      <p id="result"></p>
+    </div>
+    <script type="text/javascript">
+    var data
+    var sensortypes
+    var groups
+    // document.getElementById("tag").onclick = () =>{
+    //   let link = "file:///media/MasEka/MasEka/Veritas. Probitas. Iustitia/Proyek/customPRTGDesktop/resources/app/app/media/dataprtg/table.xml"
+    //   new Utility().getXML(link, (result) => {
+    //     data = result
+    //     usedtags = new UsedTags().getUsedtags(data.prtg.options[0].usedtags[0])
+    //     console.log("Parantos yeuh !")
+    //     document.getElementById("content").innerHTML = '<select id="dropdown_tags"></select>'
+    //     for(let i = 0; i < usedtags.length; i++){
+    //       let element = document.createElement("option")
+    //       element.value = usedtags[i]
+    //       element.innerHTML = usedtags[i]
+    //       element.className = "usedtags"
+    //       document.getElementById("dropdown_tags").appendChild(element)
+    //     }
+    //   })
+    // }
+
+    function displayGroup(objid, name){
+      if(objid != 0){
+        document.getElementById('dropdown_groups').innerHTML = '<option class="groups" value="' + groups.item[0].parentid.toString() + '">Up</option>'
+      } else {
+        document.getElementById('dropdown_groups').innerHTML = ''
+      }
+      new Utility().getXML("https://123.231.138.149/api/table.xml?content=group&columns=objid,name,parentid&filter_parentid=" + objid + "&id=" + objid + "&username=nsc_admin&count=750&passhash=4041964660", (result) =>{
+        groups = result.group
+        console.log("Parantos yeuh !")
+        if(groups.$.totalcount != 0){
+          let element = document.createElement("option")
+          element.value = objid
+          element.innerHTML = name
+          element.selected = "selected"
+          element.className = "groups"
+          document.getElementById("dropdown_groups").appendChild(element)
+          for(let i = 0; i < groups.item.length; i++){
+            let element = document.createElement("option")
+            element.value = groups.item[i].objid
+            element.innerHTML = groups.item[i].name
+            element.className = "groups"
+            document.getElementById("dropdown_groups").appendChild(element)
+          }
+        }
+      })
+    }
+
+    function displaySensor(){
+      new Utility().getJSON("https://123.231.138.149/api/sensortypesinuse.json?username=nsc_admin&passhash=4041964660", (result) =>{
+        sensortypes = result.types
+        console.log(sensortypes)
+        console.log("Parantos yeuh !")
+        for(let i = 0; i < sensortypes.length; i++){
+          let element = document.createElement("option")
+          element.value = Object.keys(sensortypes[i])
+          element.innerHTML = sensortypes[i][Object.keys(sensortypes[i])]
+          element.className = "sensortypes"
+          document.getElementById("dropdown_types").appendChild(element)
+        }
+      })
+    }
+
+    function findPeaks(array){
+      let peaks = []
+      for(let i = 0; i < array.length; i++){
+        if(array[i] > array[i + 1])
+          peaks.push(array[i])
+      }
+      return peaks
+    }
+
+    displayGroup(0, "Root")
+    displaySensor()
+
+    document.getElementById('dropdown_types').onclick = () =>{
+      console.log(document.getElementById('dropdown_types').options[document.getElementById('dropdown_types').selectedIndex].value)
+    }
+
+    document.getElementById('dropdown_groups').onclick = () =>{
+      if(groups.$.totalcount != 0){
+        console.log(document.getElementById('dropdown_groups').options[document.getElementById('dropdown_groups').selectedIndex].value)
+        displayGroup(document.getElementById('dropdown_groups').options[document.getElementById('dropdown_groups').selectedIndex].value, document.getElementById('dropdown_groups').options[document.getElementById('dropdown_groups').selectedIndex].innerHTML)
+      }
+    }
+
+    document.getElementById("button").onclick = () => {
+      new Utility().getXML("https://123.231.138.149/api/table.xml?content=sensor&columns=objid,device,group&filter_type=" + document.getElementById('dropdown_types').value + "&id=" + document.getElementById('dropdown_groups').value + "&username=nsc_admin&count=750&passhash=4041964660", (result) =>{
+        let sensors = result.sensor
+        console.log("Parantos yeuh !")
+        document.getElementById('dropdown_sensors').innerHTML = '<option value="">List Sensors</option>'
+        if(sensors.$.totalcount != 0){
+          for(let i = 0; i < sensors.item.length; i++){
+            let element = document.createElement("option")
+            element.value = sensors.item[i].objid
+            element.innerHTML = sensors.item[i].device
+            element.className = "sensors"
+            document.getElementById("dropdown_sensors").appendChild(element)
+          }
+        }
+        console.log("https://123.231.138.149/api/table.xml?content=sensor&columns=objid,name,group&filter_type=" + document.getElementById('dropdown_types').value + "&id=" + document.getElementById('dropdown_groups').value + "&username=nsc_admin&count=750&passhash=4041964660")
+        document.getElementById("api").style.display = "block"
+      })
+    }
+
+    document.getElementById("api_button").onclick = () => {
+      new Utility().getXML("https://123.231.138.149/api/historicdata.xml?&id=" + document.getElementById("dropdown_sensors").value.toString() + "&avg=" + (document.getElementById("api_interval").value * 60).toString() + "&sdate=" + document.getElementById("api_date_from").value.toString() + "&edate=" + document.getElementById("api_date_to").value.toString() + "&username=nsc_admin&passhash=4041964660", (result) =>{
+        console.log(result)
+        if(result.histdata.$.totalcount != 0){
+          document.getElementById("dropdown_channels").innerHTML = ''
+          for(let i = 0; i < result.histdata.item[0].value.length; i++){
+            let element = document.createElement("option")
+            element.value = i
+            element.innerHTML = result.histdata.item[0].value[i].$.channel
+            element.className = "channels"
+            document.getElementById("dropdown_channels").appendChild(element)
+          }
+          document.getElementById("dropdown_channels").style.display = "block"
+        }
+        document.getElementById("dropdown_channels").onclick = () => {
+          console.log(document.getElementById("dropdown_channels").value, "Index")
+          trafficData = []
+          sortedData = []
+          for(let i = 1; i < result.histdata.item.length; i++){
+            trafficData.push(parseInt(result.histdata.item[i].value_raw[document.getElementById("dropdown_channels").value]._/125))
+            sortedData.push(parseInt(result.histdata.item[i].value_raw[document.getElementById("dropdown_channels").value]._/125))
+          }
+          peaks = findPeaks(trafficData)
+          sortedPeaks = findPeaks(trafficData)
+          new DataStatistic().sortedData(sortedData)
+          new DataStatistic().sortedData(sortedPeaks)
+          console.log(new DataStatistic().percentil(95, sortedData), "Percentil")
+          let widthClass = Math.ceil((sortedData[sortedData.length - 1] - sortedData[0])/(1 + 3.3 * Math.log(sortedData.length)))
+          clusters = new DataCluster(sortedData, widthClass)
+          clusterOfPeaks = new DataCluster(sortedPeaks, Math.ceil((sortedPeaks[sortedPeaks.length - 1] - sortedData[0])/(1 + 3.3 * Math.log(sortedPeaks.length))))
+
+          peak_95e = new DataStatistic().percentil(95, peaks)
+
+          console.log(clusterOfPeaks, "Peaks")
+
+          // Plot data
+          var layout = {
+            title: 'Estimation peak bandwidth',
+            yaxis: {
+              title: 'Speed (Kbps)',
+              titlefont: {
+                family: 'Courier New, monospace',
+                size: 18,
+                color: '#7f7f7f'
+              }
+            }
+          };
+          let data = {
+            x: [],
+            y: [],
+            name: "data"
+          };
+          let estimasi = {
+            x: [0, sortedData.length],
+            y: [peak_95e, peak_95e],
+            name: "estimation"
+          };
+          for(let i = 1; i <= trafficData.length; i++){
+            data.x.push(i)
+          }
+          data.y = trafficData
+          Plotly.newPlot(document.getElementById('graph_1'), [data, estimasi], {
+             margin: { t: 0 },
+             title: "Bandwidth"
+          })
+          data.y = sortedData
+          Plotly.newPlot(document.getElementById('graph_2'), [data, estimasi], {
+             margin: { t: 0 },
+             title: "Bandwidth"
+          })
+          document.getElementById("result").innerHTML = '<p>95e Peak : ' + peak_95e + ' Kbps</p><p>Max : ' + sortedData[sortedData.length - 1] + ' Kbps</p><p>min : ' + sortedData[0] + ' Kbps</p>'
+        }
+      })
+    }
+
+      //   for(let i = 0; i < usedtags.length; i++){
+      //     let element = document.createElement("option")
+      //     element.value = usedtags[i]
+      //     element.innerHTML = usedtags[i]
+      //     element.className = "usedtags"
+      //     document.getElementById("dropdown_tags").appendChild(element)
+      //   }
+
+    // Usedtags to JSON
+    // function UsedTags(usedtags){
+    //   var usedtags = usedtags
+    //   this.getUsedtags = (usedtags_data) => {
+    //     usedtags = []
+    //     usedtags = usedtags_data.split(",")
+    //     return usedtags
+    //   }
+    //
+    //   this.checkTag = (usedtags_data) => {
+    //     if(usedtags === undefined){
+    //       return false
+    //     } else {
+    //       if(usedtags.indexOf(usedtags_data.toLowerCase()) > -1)
+    //         return true
+    //       else
+    //         return false
+    //     }
+    //   }
+    // }
+    </script>
+  </body>
+</html>
