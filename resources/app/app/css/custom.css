@@ -1,0 +1,210 @@
+/* Tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #97979a;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+/* Dialog for modal */
+
+dialog {
+    padding: 0;
+    border: 1px solid #bebebe;
+    border-radius: 6px;
+    box-shadow: 0 0 30px rgba(0,0,0,.1);
+    overflow: hidden;
+
+    &::backdrop {
+        background: rgba(0,0,0,0.2);
+    }
+}
+
+#sensorstats {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-app-region: no-drag;
+}
+
+#sensorstats .statusinfo {
+  position: relative;
+  float: left;
+}
+
+#sensorstats div.downsens {
+  background-color: #d71920;
+}
+
+#sensorstats div.upsens {
+  background-color: #b4cc38;
+}
+
+#sensorstats div.pausedsens {
+  background-color: #447fc1;
+}
+
+#sensorstats div.partialdownsens {
+  background-color: #d71920;
+  padding: 0 2px 0 0;
+}
+
+#sensorstats div.downacksens {
+  background-color: #e77579;
+}
+
+#sensorstats div.warnsens {
+  background-color: #ffcb05;
+}
+
+#sensorstats div.unusualsens {
+  background-color: #f99d1c;
+}
+
+#sensorstats div.undefinedsens {
+  background-color: #808282;
+}
+
+#sensorstats .spacing {
+  display: inline-block;
+  float: left;
+  box-shadow: none;
+}
+
+#sensorstats .spacing:hover {
+  box-shadow: none;
+}
+
+#sensorstats .statusinfo {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 2px;
+  height: 24px;
+}
+
+#sensorstats .statusinfo:hover {
+  text-decoration: none;
+}
+
+#sensorstats a,
+#sensorstats a:hover {
+  text-decoration: none;
+}
+
+#sensorstats .text {
+  padding: 2px 5px;
+  color: #fff;
+}
+
+#sensorstats div.newtickets .text {
+  color: #000;
+}
+
+#sensorstats .icon {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  display: block;
+  float: left;
+  width: 14px;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+
+#sensorstats div .counter {
+  color: #fff;
+  display: inline-block;
+  padding: 1px 2px;
+  margin: 3px 2px 3px 0;
+  text-align: center;
+}
+
+#sensorstats div.statusinfo.newtickets .counter {
+  color: #000;
+}
+
+#sensorstats div:hover .counter {
+  color: #000;
+  background-color: #fff;
+  text-shadow: none;
+}
+
+.statusinfo {
+
+}
+
+/* Sensor icons*/
+
+.undefinedIcon {
+    background-image: url(../media/icons/icon_unknown.svg) 
+}
+
+.downIcon {
+    background-image: url(../media/icons/icon_down.svg) 
+}
+
+.partialDownIcon {
+    background-image: url(../media/icons/icon_partdown.svg) 
+}
+
+.pausedIcon {
+    background-image: url(../media/icons/icon_paused.svg) 
+}
+
+.unusualIcon {
+    background-image: url(../media/icons/icon_unusual.svg) 
+}
+
+.upIcon {
+    background-image: url(../media/icons/icon_up.svg) 
+}
+
+.warningIcon {
+    background-image: url(../media/icons/icon_warning.svg) 
+}
+
+.downAckIcon {
+    background-image: url(../media/icons/icon_downack.svg) 
+}
+
+/* Box content styles */
+.box-wrapper {
+  margin: 2% 3% 2% 3%;
+}
+
+.box-header {
+  font-size: 1.5rem
+}
+
+.box-header p {
+  margin: 0px
+}
+
+#detailed-info {
+  font-size: 1em;
+  margin-bottom: 1%
+}
+
+#detailed-info p {
+  margin: 1px
+}
+
+.box-content {
+  margin-top: 2%  
+}

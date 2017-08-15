@@ -9,7 +9,8 @@
     "plotly": "^1.0.6",
     "request": "^2.81.0",
     "xml2js": "^0.4.17",
-    "xml2json": "^0.11.0"
+    "xml2json": "^0.11.0",
+    "electron": "^1.7.5"
   },
   "devDependencies": {}
 }

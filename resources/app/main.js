@@ -5,11 +5,14 @@ const url = require('url')
 var win;
 
 function createWindow(){
-  win = new BrowserWindow({width:800, height:800, title:"customPRTGDesktop"});
-  win.loadURL('file://${__dirname}/index.html');
-
+  win = new BrowserWindow({
+    width:800, 
+    height:800, 
+    title:"customPRTGDesktop"
+  });
+  
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'app/public/', 'welcome.html'),
     protocol: 'file:',
     slashes: true
   }))

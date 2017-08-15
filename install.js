@@ -1,6 +1,6 @@
 var electronInstaller = require('electron-winstaller');
 resultPromise = electronInstaller.createWindowsInstaller({
-    appDirectory: '../customPRTGDesktop',
+    appDirectory: './customPRTGDesktop',
     outputDirectory: './installer64',
     authors: 'My App Inc.',
     exe: 'myapp.exe'

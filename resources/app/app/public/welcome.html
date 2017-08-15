@@ -1,115 +1,250 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>customPRTGDesktop</title>
-    <script type="application/javascript" src="app/js/dataStatistic.js">
-    </script>
-    <script type="text/javascript" src="app/js/plotly-latest.min.js">
-
-    </script>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/photon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/custom.css">
+    <style>
+      /* Calendar picker */
+      [type="date"] {
+        background:#fff url(../media/icons/icon_calendar.svg)  97% 50% no-repeat ;
+      }
+      [type="date"]::-webkit-inner-spin-button {
+        display: none;
+      }
+      [type="date"]::-webkit-clear-button {
+        display: none;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+      }
+      #dataModal input {
+        width: 100%
+      }
+    </style>
   </head>
   <body>
-    <script type="text/javascript">
-      const VOLUME_TOTAL = 0
-      const VOLUME_IN = 2
-      const VOLUME_OUT = 4
+  <div class="window">
+    <header class="toolbar toolbar-header">
+      <h1 class="title">customPRTGDesktop</h1>
+      <div class="toolbar-actions">
+        <div id="sensorstats">
+          <div class="statusinfo warnsens tooltip">
+            <a href="#">
+              <span class="icon warningIcon"></span>
+              <span class="counter">1</span>
+              <span class="tooltiptext">1 Warning</span>
+            </a>
+          </div>
+          <div class="statusinfo upsens tooltip">
+            <a href="#">
+              <span class="icon upIcon"></span>
+              <span class="counter">68</span>
+              <span class="tooltiptext">68 Up</span>
+            </a>
+          </div>
+          <div class="statusinfo pausedsens tooltip">
+            <a href="#">
+              <span class="icon pausedIcon"></span>
+              <span class="counter">144</span>
+              <span class="tooltiptext">144 Paused</span>
+            </a>
+          </div>
+          <div class="statusinfo unusualsens tooltip">
+            <a href="#">
+              <span class="icon unusualIcon"></span>
+              <span class="counter">1</span>
+              <span class="tooltiptext">1 Unusual</span>
+            </a>
+          </div>
+          <div class="statusinfo undefinedsens tooltip">
+            <a href="#">
+              <span class="icon undefinedIcon"></span>
+              <span class="counter">2</span>
+              <span class="tooltiptext">2 Undefined</span>
+            </a>
+          </div>
+        </div>
+        <button class="btn btn-default pull-right" id="export">
+          <span class="icon icon-download icon-text"></span>
+          Export to XML
+        </button>
+      </div>      
+    </header>
+    <div class="window-content">
+      <div class="pane-group">
+        <div class="pane-sm sidebar">
+          <div>
+            <ul class="list-group">
+              <li class="list-group-header">
+                <input class="form-control" type="text" placeholder="Search Device">
+                <br> <br>
+                <div class="media-body">
+                  <p class="center">Tipe Sensor</p>
+                  <select class="btn btn-default btn-dropdown">
+                    <option value="">Semua</option>
+                  </select>
+                </div>
+                <br>
+                <div class="media-body">
+                  <p class="center">Group Sensor</p>
+                  <select class="btn btn-default btn-dropdown">
+                    <option value="0">Root</option>
+                  </select>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <button class="btn btn-default">Cari Sensor</button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div style="position:absolute;bottom:0;margin-bottom:1%">
+                  <button id="getData" type="button" class="btn btn-primary">Lihat data</button>  
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="pane">
+          <!-- General wrapper div for content -->
+          <div class="box-wrapper">
+            <!-- Table of data -->
+            <table id="dataTable" style="width:100%">
+              <th>Device</th>
+              <th>Sensor Type</th>
+              <th>Status</th>
+              <th>Last Value</th>
+              <tr>
+                <td id="objid">Garp</td>
+                <td>Marine</td>
+                <td>Up</td>
+                <td>Level 67</td>
+              </tr>
+              <tr onclick="getData(this.title)" title="Luffy">
+                <td>Luffy</td>
+                <td>Pirate</td>
+                <td>Up</td>
+                <td>Level 27</td>
+              </tr>
+              <tr>
+                <td>Ace</td>
+                <td>Pirate</td>
+                <td>Down</td>
+                <td>Level 32</td>
+              </tr>
+            </table>
+            <!-- Any headings goes to here -->
+            <!-- <div class="box-header"> -->
+              <!-- <span id="general-info">Device : Lamana | Sensor : Lapaya</span>
+            </div> -->
+            <!-- Contents goes to here -->
+            <!-- <div class="box-content">
+              <div id="detailed-info"> -->
+                <!-- Information here -->
+                <!-- <p>Last value : 2 Kbit</p>
+                <p>Status : Up</p>
+                <p>Host address : 127.0.0.1</p>
+              </div>
+              <div style="padding:2%"> -->
+                <!-- Graph here -->
+                <!-- Graphs here
+                <br>
+                <div id="graph_1" style="display:inline-block">
+                  graph1
+                </div>
+                <div id="graph_2" style="display:inline-block">
+                  graph2 
+                </div>
+              </div>
+            </div> -->
+          </div> 
+        </div>
+        <div class="pane-sm sidebar" id="graph" style="display:block; min-width:30%; padding:2%">
+              <div style="min-height:30%;max-height:50%;border-bottom-style:solid;border-color:#666666">
+                <p>Graph 1</p>
+              </div>
+              <div style="min-height:30%;max-height:50%">
+                <p>Graph 2</p>
+              </div> 
+        </div>
+      </div>
+    </div>
+    <footer class="toolbar toolbar-footer">
+      <h1 class="title">/* Developed by Tim KP @ 2017 (2.0FM Team Project) */</h1>
+    </footer>
+  </div>
+  <dialog id="dataModal">
+    <header class="toolbar toolbar-header">
+        <h1 class="title">Ambil data sensor</h1>
+    </header>
+    <div style="padding:50px">
+        <form>
+          <label>Date From : </label><br>
+          <input type="date" name="dateFrom" id="dateFrom">
+          <br><br>
+          <label>Date to : </label><br>
+          <input type="date" name="dateTo" id="dateTo">
+          <br><br>
+          <label>Interval : </label><br>
+          <input type="text" name="interval" value="60" id="interval">
+        </form>
+    </div>
+    <footer class="toolbar toolbar-footer">
+        <div class="toolbar-actions">
+            <button onclick="document.getElementById('dataModal').close(false)" class="btn btn-default">Batal</button>
+            <button onclick="document.getElementById('dataModal').close(true)" class="btn btn-primary pull-right">Lihat</button>
+        </div>
+    </footer>
+  </dialog>
+  <dialog id="exportModal">
+    <header class="toolbar toolbar-header">
+        <h1 class="title">Export XML</h1>
+    </header>
+    <div style="padding:50px">
+        <form>
+          <input type="text" id="savePath" placeholder="" disabled>
+          <button type="button" id="saveFile">Load xml File</button>
+          <br>
+          <input type="checkbox" name="peakSelect" value=true> Masukan data puncak
+        </form>
+    </div>
+    <footer class="toolbar toolbar-footer">
+        <div class="toolbar-actions">
+            <button onclick="document.getElementById('exportModal').close(false)" class="btn btn-default">Batal</button>
+            <button onclick="document.getElementById('exportModal').close(true)" class="btn btn-primary pull-right">Export</button>
+        </div>
+    </footer>
+  </dialog>
+  <script>
+    var path = require('path'),
+    url = require('url'),
+    {dialog} = require('electron').remote
+    // Listener ambil data
+    function getData(param){
+      document.getElementById("dataModal").showModal()
+    }
+    document.getElementById("export").onclick = () => {
+      document.getElementById("exportModal").showModal()
+    }
 
-      var fs = require('fs'),
-      xml2js = require('xml2js'),
-      https = require('https'),
-      dataStatistic = require('simple-statistics')
-      var parser = new xml2js.Parser();
-
-      var trafficData = []
-      var clusteredData = []
-      var parser = new xml2js.Parser();
-      var newCluster = []
-
-      parser.on('error', function(err) { console.log('Parser error', err); });
-
-      'use strict';
-      var request = require('request');
-      var agentOptions;
-      var agent;
-      agentOptions = {
-        host: '123.231.138.149'
-      , port: '443'
-      , path: '/'
-      , rejectUnauthorized: false
-      };
-      agent = new https.Agent(agentOptions);
-
-      request({
-        url: "https://123.231.138.149/api/historicdata.xml?avg=1000&id=11734&sdate=2017-06-01-00-00-00&edate=2017-06-30-00-00-00&username=nsc_admin&passhash=4041964660"
-      , method: 'GET'
-      , agent: agent
-      }, function (err, resp, body) {
-        if (resp.statusCode >= 200 && resp.statusCode < 400) {
-            parser.parseString(body, function(err, result) {
-              console.log(err, result)
-              for(let i = 1; i < result.histdata.item.length; i++){
-                trafficData.push(parseInt(result.histdata.item[i].value_raw[1]._/125))
-              }
-              console.log("95e : " + (new DataStatistic(trafficData).percentil(95) + new DataStatistic(trafficData).percentil(95) * 0.1) + " Kbps")
-              plot(trafficData, (resp) => {
-                console.log(resp)
-              })
-            });
-          };
-        }
-      );
-
-      // fs.readFile(__dirname + '/app/media/dataprtg/historicdata_may.xml', function(err, data) {
-      //     parser.parseString(data, function (err, result) {
-      //         for(let i = 1; i < result.histdata.item.length; i++){
-      //           trafficData.push(parseInt(result.histdata.item[i].value_raw[1]._/1000000))
-      //         }
-      //         clusteredData = dataStatistic.ckmeans(trafficData, 1/3 * trafficData.length)
-      //         // clusterMerge(clusteredData)
-      //         // bandwidthEstimation(clusteredData)
-      //         // console.log(trafficData)
-      //         console.log("Bandwidth Optimum : " + (new DataStatistic(trafficData).percentil(95) + new DataStatistic(trafficData).mean() * 0.1) + " satuan")
-      //     });
-      // });
-
-      // function clusterMerge(data){
-      //   let dataStatistic = new DataStatistic(data)
-      //   let newCluster = []
-      //   let result = []
-      //   for(k = 0; k < data.length - 1; k++){
-      //     let tmp = data[k]
-      //     if(dataStatistic.standardDeviation([dataStatistic.mean(tmp), dataStatistic.mean(data[k + 1])]) <= dataStatistic.mean(trafficData) * 0.3){
-      //       tmp = tmp.concat(data[k + 1])
-      //       k++
-      //     }
-      //     newCluster.push(tmp)
-      //   }
-      //   for(k = 0; k < newCluster.length - 1; k++){
-      //     if(dataStatistic.mean(newCluster[k]) > dataStatistic.mean(trafficData)){
-      //       result = newCluster[k]
-      //       break;
-      //     }
-      //   }
-      //   console.log("Bandwidth Optimum : " + dataStatistic.percentil(result, 95) + " satuan")
-      // }
-
-      function plot(trace){
-        TESTER = document.getElementById('tester');
-        let trace1 = {
-          x: [],
-          y: []
-        };
-        for(let i = 1; i <= trace.length; i++){
-          trace1.x.push(i)
-        }
-        trace1.y = trace
-        Plotly.plot( TESTER, [trace1], {
-      	   margin: { t: 0 },
-           title: "Bandwidth"
-           })
+    // Listener dataModal
+    document.getElementById("dataModal").onclose = (e) => {
+      if(e.target.returnValue == "true"){
+        console.log(document.getElementById("dateFrom").value, "DateFrom")
       }
-    </script>
-    <div id="tester" style="width:600px;height:250px;"></div>
+    }
+
+    // Listener exportModal
+    document.getElementById("saveFile").onclick = () => {
+      dialog.showSaveDialog({filters:[{name:'XML File', extensions: ['xml']}, {name:'others', extensions:['*']}]},(filename) => {
+        document.getElementById("savePath").placeholder = filename
+      })
+    }
+  </script>
   </body>
-</html>
+</html
