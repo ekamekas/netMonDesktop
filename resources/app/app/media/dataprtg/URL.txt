@@ -5,7 +5,7 @@ https://123.231.138.149/api/chart.png?id=11734&avg=15&sdate=2017-06-01-00-00-00&
 https://123.231.138.149/api/table.xml?content=sensortree&username=nsc_admin&passhash=4041964660
 
 Ambil sensor berdasarkan group
-https://123.231.138.149/api/table.json?content=sensors&output=json&columns=objid,group,sensor&id=100176&username=nsc_admin&passhash=4041964660
+https://123.231.138.149/api/table.json?content=sensors&output=json&columns=objid,group,device,sensor,host,status,favorite,lastup,lastdown&id=0&username=nsc_admin&passhash=4041964660
 
 List perangkat berdasarkan group
 https://123.231.138.149/api/table.json?content=devices&output=json&columns=objid,name,group&id=100176&username=nsc_admin&passhash=4041964660
@@ -23,3 +23,6 @@ https://123.231.138.149/api/table.xml?content=group&columns=objid,name&filter_pa
 
 Cari perangakt berdasarkan PARAMETER
 https://123.231.138.149/api/table.json?content=devices&columns=objid,device&filter_device=@sub(/*PARAMETER*/)&username=nsc_admin&passhash=4041964660
+
+// Ada bug di table dimana cluster ke dua dan seterusnya panjangnya tidak sesuai
+// Taruh sensor hasil fetch di temp folder untuk digunakan ketika mau export data

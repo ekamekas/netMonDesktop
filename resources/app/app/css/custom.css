@@ -29,10 +29,19 @@ dialog {
     box-shadow: 0 0 30px rgba(0,0,0,.1);
     overflow: hidden;
 
-    &::backdrop {
+    /* &::backdrop {
         background: rgba(0,0,0,0.2);
-    }
+    } */
 }
+
+/* Overflow text handler */
+.overflowText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+/* Sensor info toolbar */
 
 #sensorstats {
   position: relative;
@@ -186,6 +195,7 @@ dialog {
 /* Box content styles */
 .box-wrapper {
   margin: 2% 3% 2% 3%;
+  height: 90%
 }
 
 .box-header {

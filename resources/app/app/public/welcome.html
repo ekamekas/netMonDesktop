@@ -4,8 +4,10 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="../js/utility.js"></script>
     <link href="../css/photon.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="../css/clusterize.css">
     <style>
       /* Calendar picker */
       [type="date"] {
@@ -23,7 +25,25 @@
       #dataModal input {
         width: 100%
       }
-    </style>
+      .deviceTable {
+        width: 40%;
+      }
+      .sensorTable {
+        width: 30%
+      }
+      .typeTable {
+        width: 20%
+      }
+      .statusTable {
+        width: 10%
+      }
+  </style>
+  <script>
+    var path = require('path'),
+    url = require('url'),
+    {dialog} = require('electron').remote,
+    clusterizejs = require('clusterize.js')
+  </script>
   </head>
   <body>
   <div class="window">
@@ -96,7 +116,7 @@
                 </div>
               </li>
               <li class="list-group-item">
-                <button class="btn btn-default">Cari Sensor</button>
+                <button id="searchButton" class="btn btn-default">Cari Sensor</button>
               </li>
             </ul>
           </div>
@@ -114,61 +134,34 @@
           <!-- General wrapper div for content -->
           <div class="box-wrapper">
             <!-- Table of data -->
-            <table id="dataTable" style="width:100%">
-              <th>Device</th>
-              <th>Sensor Type</th>
-              <th>Status</th>
-              <th>Last Value</th>
-              <tr>
-                <td id="objid">Garp</td>
-                <td>Marine</td>
-                <td>Up</td>
-                <td>Level 67</td>
-              </tr>
-              <tr onclick="getData(this.title)" title="Luffy">
-                <td>Luffy</td>
-                <td>Pirate</td>
-                <td>Up</td>
-                <td>Level 27</td>
-              </tr>
-              <tr>
-                <td>Ace</td>
-                <td>Pirate</td>
-                <td>Down</td>
-                <td>Level 32</td>
-              </tr>
-            </table>
-            <!-- Any headings goes to here -->
-            <!-- <div class="box-header"> -->
-              <!-- <span id="general-info">Device : Lamana | Sensor : Lapaya</span>
-            </div> -->
-            <!-- Contents goes to here -->
-            <!-- <div class="box-content">
-              <div id="detailed-info"> -->
-                <!-- Information here -->
-                <!-- <p>Last value : 2 Kbit</p>
-                <p>Status : Up</p>
-                <p>Host address : 127.0.0.1</p>
-              </div>
-              <div style="padding:2%"> -->
-                <!-- Graph here -->
-                <!-- Graphs here
-                <br>
-                <div id="graph_1" style="display:inline-block">
-                  graph1
+            <!--HTML-->
+            <div class="clusterize" style="height:100%">
+              <table id="headerArea">
+                <tr>
+                  <th class="deviceTable">Device</th>
+                  <th class="sensorTable">Sensor</th>
+                  <th class="typeTable">Type</th>
+                  <th class="statusTable">Status</th>
+                </tr>
+              </table>
+                <div id="scrollArea" class="clusterize-scroll" style="min-height:100%">
+                  <table style="table-layout:fixed">
+                  <tbody id="contentArea" class="clusterize-content">
+                    <tr class="clusterize-no-data">
+                      <td colspan="4">Load the data</td>
+                    </tr>
+                  </tbody>
+                  </table>
                 </div>
-                <div id="graph_2" style="display:inline-block">
-                  graph2 
-                </div>
-              </div>
-            </div> -->
+              </table>
+            </div>
           </div> 
         </div>
         <div class="pane-sm sidebar" id="graph" style="display:block; min-width:30%; padding:2%">
-              <div style="min-height:30%;max-height:50%;border-bottom-style:solid;border-color:#666666">
+              <div style="min-height:40%;max-height:50%;border-bottom-style:solid;border-color:#666666">
                 <p>Graph 1</p>
               </div>
-              <div style="min-height:30%;max-height:50%">
+              <div style="min-height:40%;max-height:50%">
                 <p>Graph 2</p>
               </div> 
         </div>
@@ -182,17 +175,19 @@
     <header class="toolbar toolbar-header">
         <h1 class="title">Ambil data sensor</h1>
     </header>
-    <div style="padding:50px">
-        <form>
-          <label>Date From : </label><br>
-          <input type="date" name="dateFrom" id="dateFrom">
-          <br><br>
-          <label>Date to : </label><br>
-          <input type="date" name="dateTo" id="dateTo">
-          <br><br>
-          <label>Interval : </label><br>
-          <input type="text" name="interval" value="60" id="interval">
-        </form>
+    <div style="padding: 0px 50px 50px 50px">
+      <p class="overflowText">Device : <span id="deviceNameModal"></span></p>
+      <p class="overflowText">Sensor : <span id="sensorNameModal"></span></p>
+      <form>
+        <label>Date From : </label><br>
+        <input type="date" name="dateFrom" id="dateFrom">
+        <br><br>
+        <label>Date to : </label><br>
+        <input type="date" name="dateTo" id="dateTo">
+        <br><br>
+        <label>Interval : </label><br>
+        <input type="text" name="interval" value="60" id="interval">
+      </form>
     </div>
     <footer class="toolbar toolbar-footer">
         <div class="toolbar-actions">
@@ -206,12 +201,12 @@
         <h1 class="title">Export XML</h1>
     </header>
     <div style="padding:50px">
-        <form>
-          <input type="text" id="savePath" placeholder="" disabled>
-          <button type="button" id="saveFile">Load xml File</button>
-          <br>
-          <input type="checkbox" name="peakSelect" value=true> Masukan data puncak
-        </form>
+      <form>
+        <input type="text" id="savePath" placeholder="" disabled>
+        <button type="button" id="saveFile">Load xml File</button>
+        <br>
+        <input type="checkbox" name="peakSelect" value=true> Masukan data puncak
+      </form>
     </div>
     <footer class="toolbar toolbar-footer">
         <div class="toolbar-actions">
@@ -221,28 +216,66 @@
     </footer>
   </dialog>
   <script>
-    var path = require('path'),
-    url = require('url'),
-    {dialog} = require('electron').remote
-    // Listener ambil data
-    function getData(param){
+    // Table data Clusterjs
+    var data
+    // Assigning data
+    // Fetch data
+    
+    var clusterize = new clusterizejs({
+      rows: data,
+      scrollId: 'scrollArea',
+      contentId: 'contentArea'
+    });
+
+    // Click listeners
+    // Listener table data
+    document.getElementById('contentArea').onclick = function(e) {
+      e = e || event;
+      var target = e.target || e.srcElement;
+      console.log(e)
+      if(target.parentElement.nodeName != 'TR') return;
+      document.getElementById("deviceNameModal").innerHTML = target.parentElement.children[0].innerHTML
+      document.getElementById("sensorNameModal").innerHTML = target.parentElement.children[1].innerHTML
       document.getElementById("dataModal").showModal()
     }
+    // Export listener
     document.getElementById("export").onclick = () => {
       document.getElementById("exportModal").showModal()
     }
-
-    // Listener dataModal
+    // dataModal listener
     document.getElementById("dataModal").onclose = (e) => {
       if(e.target.returnValue == "true"){
         console.log(document.getElementById("dateFrom").value, "DateFrom")
       }
     }
-
-    // Listener exportModal
+    // exportModal listener
     document.getElementById("saveFile").onclick = () => {
       dialog.showSaveDialog({filters:[{name:'XML File', extensions: ['xml']}, {name:'others', extensions:['*']}]},(filename) => {
         document.getElementById("savePath").placeholder = filename
+      })
+    }
+    // Search button listener
+    document.getElementById("searchButton").onclick = () => {
+      let count = 0
+      // let href = "https://123.231.138.149/api/table.json?content=sensor&columns=objid&id=0&username=nsc_admin&passhash=4041964660&count=" + count
+      new Utility().getXML(new Utility().windowsSlash("file://E:/MasEka/Veritas. Probitas. Iustitia/Proyek/customPRTGDesktop/resources/app/app/media/dataprtg/sensors.xml"), (result) => {
+        data = []
+        // count = result.treesize
+        // let href = "https://123.231.138.149/api/table.xml?content=sensor&columns=objid,device,group,name&id=0&username=nsc_admin&passhash=4041964660&count=" + count
+        // if(document.getElementById('dropdown_types').selectedIndex != 0)
+        //   href += ("&filter_type=" + document.getElementById('dropdown_types').value)
+        // new Utility().getXML(href, (result) =>{
+          let sensors = result.sensors
+          if(sensors.$.totalcount != 0){
+            for(let i = 0; i < sensors.item.length; i++){
+              if(sensors.item[i].device != ""){
+                // data.push('<tr><td>' + sensors.item[i].group + '</td><td>' + sensors.item[i].sensor + '</td<td>' + sensors.item[i].objid + '</td><td>' + i + '</td></tr>')
+                data.push('<tr><td class="deviceTable overflowText">' + sensors.item[i].device + '</td><td class="sensorTable overflowText">' + sensors.item[i].sensor + '</td><td class="typeTable overflowText">' + sensors.item[i].type + '</td><td class="statusTable overflowText">' + sensors.item[i].status + '</td></tr>')
+              }
+            }
+          }
+          clusterize.update(data)
+        // })
       })
     }
   </script>
