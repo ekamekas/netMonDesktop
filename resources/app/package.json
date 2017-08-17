@@ -6,12 +6,11 @@
     "createInstaller": "node ./install.js"
   },
   "dependencies": {
+    "clusterize.js": "^0.17.6",
     "electron": "^1.7.5",
-    "plotly": "^1.0.6",
     "request": "^2.81.0",
     "xml2js": "^0.4.17",
-    "xml2json": "^0.11.0",
-    "clusterize.js": "^0.17.6"
+    "xml2json": "^0.11.0"
   },
   "devDependencies": {}
 }

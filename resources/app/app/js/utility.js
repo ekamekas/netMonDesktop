@@ -1,5 +1,6 @@
 function Utility(){
   var fs = require('fs'),
+  path = require('path'),
   url = require('url'),
   xml2js = require('xml2js')
   https = require('https')
@@ -62,8 +63,6 @@ function Utility(){
   this.writeXML = function(data, outputPath, callback){
     let builder = new xml2js.Builder()
     let xml = ""
-    console.log(outputPath, "Output path")
-    console.log(typeof(data), "Tipe data")
     if(typeof(data) === "object")
       xml = builder.buildObject(data)
     fs.writeFile(outputPath, xml, (err) => {
@@ -97,6 +96,87 @@ function Utility(){
       }
     )
   }
+
+  // Exporting to spreadsheet-xml format
+  // data : Array dari data yang akan ditulis
+  this.writeSpreadsheet = (data, columns, outputfile, template, callback) => {
+      function addRow(rowNumber, rowData, table){
+          let cell = []
+          // Inserting row number
+          cell.push({
+              "$":{
+                "ss:MergedDown":1
+              },
+              "Data":[
+                {
+                  "$":{
+                    "ss:Type":"String"
+                  },
+                  "_":rowNumber
+                }
+              ]
+            })
+          for(let i = 0; i < rowData.length; i++){
+            // Inserting cell data
+            let cellData = rowData[i]
+            if(cellData === undefined)
+              cellData = ''
+            else
+              cellData = cellData[0]
+            cell.push({
+              "$":{
+                "ss:MergedDown":1
+              },
+              "Data":[
+                {
+                  "$":{
+                    "ss:Type":"String"
+                  },
+                  "_":cellData
+                }
+              ]
+            })
+          }
+          table.push({Cell:cell})
+      }
+      if(outputfile === undefined)
+        outputfile = path.join(__dirname + "../" + "dist/result.xml")
+      outputfile = this.windowsSlash(outputfile)
+      if(template === undefined)
+        template = path.join(__dirname, "../", "media/excelTemplate.xml")
+      template = this.windowsSlash("file://" + template)
+      this.getXML(template, (result) => {
+        console.log("Proses sedang berjalan");
+        template = result
+        console.log(result)
+        if(data !== undefined && data.length != 0){
+          try{
+            template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedRowCount"] = template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedRowCount"] + data.length + 1   // Assign metadata of row counts (with header)
+            if(template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedColumnCount"] < columns.length + 1)
+              template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedColumnCount"] = columns.length + 1   // Assign metadata of column counts (with number column)
+            template.Workbook.Worksheet[0].Table[0]["Row"] = []   // Declare new attribute
+            // Add header row
+            addRow('No', columns, template.Workbook.Worksheet[0].Table[0]["Row"])
+            // Start loopy
+            for(let i = 0; i < data.length; i++){
+              let rowData = []
+              for (col = 0; col < columns.length; col++) {
+                rowData.push(data[i][columns[col]])
+              }
+              addRow(i + 1, rowData, template.Workbook.Worksheet[0].Table[0]["Row"])
+            }
+            // End loopy
+            // Write to file
+            this.writeXML(template, outputfile, () => {
+              callback(outputfile)
+            })
+          } catch(err){
+            console.log(err, "Why ?")
+            callback()
+          }
+        }
+      })
+    }
 
   // For Windows path
   this.windowsSlash = (path) => {

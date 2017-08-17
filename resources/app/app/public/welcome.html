@@ -39,9 +39,7 @@
       }
   </style>
   <script>
-    var path = require('path'),
-    url = require('url'),
-    {dialog} = require('electron').remote,
+    var {dialog} = require('electron').remote,
     clusterizejs = require('clusterize.js')
   </script>
   </head>
@@ -148,7 +146,7 @@
                   <table style="table-layout:fixed">
                   <tbody id="contentArea" class="clusterize-content">
                     <tr class="clusterize-no-data">
-                      <td colspan="4">Load the data</td>
+                      <td colspan="4">No data to display</td>
                     </tr>
                   </tbody>
                   </table>
@@ -191,8 +189,7 @@
     </div>
     <footer class="toolbar toolbar-footer">
         <div class="toolbar-actions">
-            <button onclick="document.getElementById('dataModal').close(false)" class="btn btn-default">Batal</button>
-            <button onclick="document.getElementById('dataModal').close(true)" class="btn btn-primary pull-right">Lihat</button>
+            <button onclick="document.getElementById('dataModal').close(false)" class="btn btn-default">Batal</button> <button onclick="document.getElementById('dataModal').close(true)" class="btn btn-primary pull-right">Lihat</button>
         </div>
     </footer>
   </dialog>
@@ -202,11 +199,21 @@
     </header>
     <div style="padding:50px">
       <form>
-        <input type="text" id="savePath" placeholder="" disabled>
-        <button type="button" id="saveFile">Load xml File</button>
+        <div id="columnExport" style="display:inline-block;width:100%">
+          <input type="checkbox" name="peakSelect" value=device> Device
+          <input type="checkbox" name="peakSelect" value=sensor> Sensor
+          <input type="checkbox" name="peakSelect" value=host> IP Address
+          <input type="checkbox" name="peakSelect" value=status> Status
+          <input type="checkbox" name="peakSelect" value=lastdown> LastDown
+          <input type="checkbox" name="peakSelect" value=lastup> LastUp 
+        </div>
         <br>
-        <input type="checkbox" name="peakSelect" value=true> Masukan data puncak
+        <input style="width:80%" type="text" id="savePath" placeholder="" disabled>
+        <button style="width:15%" type="button" id="saveFile" >Save file</button>
+        <br>
+        <input type="checkbox" name="peakSelect" value=true> Masukan data puncak  
       </form>
+      <span style="color:red">Warning : Fetching data with peaks will take vastly long, depends on connection</span>
     </div>
     <footer class="toolbar toolbar-footer">
         <div class="toolbar-actions">
@@ -216,16 +223,42 @@
     </footer>
   </dialog>
   <script>
+    var sensors
+
     // Table data Clusterjs
     var data
-    // Assigning data
-    // Fetch data
-    
     var clusterize = new clusterizejs({
       rows: data,
       scrollId: 'scrollArea',
       contentId: 'contentArea'
     });
+
+    // dataModal listener
+    document.getElementById("dataModal").onclose = (e) => {
+      if(e.target.returnValue == "true"){
+        console.log(document.getElementById("dateFrom").value, "DateFrom")
+      }
+    }
+    // exportModal listener
+    document.getElementById("exportModal").onclose = (e) => {
+      if(e.target.returnValue == "true"){
+        if(document.getElementById("savePath").placeholder == '')
+          dialog.showErrorBox("No save file", "Please select destination file")
+        else{
+          let columns = []
+          for (input = 0; input < document.getElementById("columnExport").getElementsByTagName("input").length; input++) {
+            if(document.getElementById("columnExport").getElementsByTagName("input")[input].checked)
+              columns.push(document.getElementById("columnExport").getElementsByTagName("input")[input].value)
+          }
+          new Utility().writeSpreadsheet(sensors.item, columns, document.getElementById("savePath").placeholder, undefined, (path) => {
+            if(path !== undefined)
+              alert(path, "Berhasil")
+            else 
+              alert("Gagal")
+          })
+        }
+      }
+    }
 
     // Click listeners
     // Listener table data
@@ -240,22 +273,22 @@
     }
     // Export listener
     document.getElementById("export").onclick = () => {
-      document.getElementById("exportModal").showModal()
+      if(sensors !== undefined)
+        document.getElementById("exportModal").showModal()
+      else 
+        dialog.showErrorBox("No data", "Get data from left sidebar")
     }
-    // dataModal listener
-    document.getElementById("dataModal").onclose = (e) => {
-      if(e.target.returnValue == "true"){
-        console.log(document.getElementById("dateFrom").value, "DateFrom")
-      }
-    }
-    // exportModal listener
+    
     document.getElementById("saveFile").onclick = () => {
       dialog.showSaveDialog({filters:[{name:'XML File', extensions: ['xml']}, {name:'others', extensions:['*']}]},(filename) => {
+        if(filename === undefined)
+          filename = ''
         document.getElementById("savePath").placeholder = filename
       })
     }
     // Search button listener
     document.getElementById("searchButton").onclick = () => {
+      document.getElementById("contentArea").innerHTML = '<tr class="clusterize-no-data"><td colspan="4">Loading data...</td></tr>'
       let count = 0
       // let href = "https://123.231.138.149/api/table.json?content=sensor&columns=objid&id=0&username=nsc_admin&passhash=4041964660&count=" + count
       new Utility().getXML(new Utility().windowsSlash("file://E:/MasEka/Veritas. Probitas. Iustitia/Proyek/customPRTGDesktop/resources/app/app/media/dataprtg/sensors.xml"), (result) => {
@@ -265,7 +298,7 @@
         // if(document.getElementById('dropdown_types').selectedIndex != 0)
         //   href += ("&filter_type=" + document.getElementById('dropdown_types').value)
         // new Utility().getXML(href, (result) =>{
-          let sensors = result.sensors
+          sensors = result.sensors
           if(sensors.$.totalcount != 0){
             for(let i = 0; i < sensors.item.length; i++){
               if(sensors.item[i].device != ""){
