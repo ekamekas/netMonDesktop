@@ -134,8 +134,18 @@
         <div class="pane">
           <!-- General wrapper div for content -->
           <div class="box-wrapper">
-            <!-- Table of data -->
-            <!--HTML-->
+            <!-- Date input -->
+              <div style="margin-left:auto; margin-right:auto; padding-bottom: 2%;">
+                <form>
+                  Date From :
+                  <input type="date" id="dateFrom">
+                  Date To :
+                  <input type="date" id="dateTo">
+                  Interval : 
+                  <input type="number" min="0" value="60" id="interval" style="max-width:50px">
+                </form>  
+              </div>
+            <!-- Clusterize sensor data -->
             <div class="clusterize" style="height:100%">
               <table id="headerArea">
                 <tr>
@@ -145,7 +155,7 @@
                   <th class="statusTable">Status</th>
                 </tr>
               </table>
-                <div id="scrollArea" class="clusterize-scroll" style="min-height:100%">
+                <div id="scrollArea" class="clusterize-scroll" style="min-height:95%">
                   <table style="table-layout:fixed">
                   <tbody id="contentArea" class="clusterize-content">
                     <tr class="clusterize-no-data">
@@ -247,8 +257,8 @@
     var sensors, sensorDetails, trafficData
     
     // Plot
-    var plotGraph = new Plot(document.getElementById("graph"))
-    plotGraph.plot("Graph", "Informasi data sensor", "Waktu", "Data sensor")
+    var plotGraph = new Plot()
+    plotGraph.plot(document.getElementById("graph"), "Graph", "Informasi data sensor", "Waktu", "Data sensor")
 
     // Table data Clusterjs
     var data
@@ -288,16 +298,23 @@
         }
       }
     }
+    // sensorDetailsModal listener
+    document.getElementById("sensorDetailsModal").onclose = () => {
+      sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"] = plotGraph.correction
+    }
 
     // Click listeners
     // Listener table data
     document.getElementById('contentArea').onclick = function(e) {
       e = e || event;
-      var target = e.target || e.srcElement;
+      let target = e.target || e.srcElement;
+      console.log(target.parentElement.getAttribute("data-index"))
+      let rowIndex = target.parentElement.getAttribute("data-index")
       if(target.parentElement.nodeName != 'TR') return;
       // Dummy input
       plotGraph.data = dummy
       plotGraph.chart.series[0].setData(dummy, true)
+      document.getElementById("sensorDetailsModal").setAttribute("data-index", rowIndex)
       // document.getElementById("deviceNameModal").innerHTML = target.parentElement.children[0].innerHTML
       // document.getElementById("sensorNameModal").innerHTML = target.parentElement.children[1].innerHTML
       // document.getElementById("dataModal").showModal()
@@ -333,7 +350,7 @@
             for(let i = 0; i < sensors.item.length; i++){
               if(sensors.item[i].device != ""){
                 // data.push('<tr><td>' + sensors.item[i].group + '</td><td>' + sensors.item[i].sensor + '</td<td>' + sensors.item[i].objid + '</td><td>' + i + '</td></tr>')
-                data.push('<tr><td class="deviceTable overflowText">' + sensors.item[i].device + '</td><td class="sensorTable overflowText">' + sensors.item[i].sensor + '</td><td class="typeTable overflowText">' + sensors.item[i].type + '</td><td class="statusTable overflowText">' + sensors.item[i].status + '</td></tr>')
+                data.push('<tr data-index=' + i + '><td class="deviceTable overflowText">' + sensors.item[i].device + '</td><td class="sensorTable overflowText">' + sensors.item[i].sensor + '</td><td class="typeTable overflowText">' + sensors.item[i].type + '</td><td class="statusTable overflowText">' + sensors.item[i].status + '</td></tr>')
               }
             }
           }

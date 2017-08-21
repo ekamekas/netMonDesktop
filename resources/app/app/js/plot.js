@@ -5,20 +5,20 @@ var Highcharts = require('highcharts/highstock')
 require('highcharts/modules/exporting')(Highcharts)
 
 // Data must be arrays of x and y
-function Plot(container, data){
+function Plot(data){
     let color = '#3F51B5';
     let rgba = new Highcharts.Color(color).setOpacity(0.66).get();
     this.data = data
     if(this.data === undefined || this.data === null)
         this.data = []
-    this.container = container
-    this.plot = (title, subtitle, xTitle, yTitle) => {
+    this.correction
+    this.plot = (container, title, subtitle, xTitle, yTitle) => {
         this.chart = Highcharts.chart(container, {
             chart: {
                events: {
                    click: () => {
-                       if(this.chart.series[0].data.length == 0) return
-                       new Plot("graph1", this.data).humanPlot(title, subtitle, xTitle, yTitle)
+                       if(this.data.length == 0) return
+                       this.humanPlot("graph1", title, subtitle, xTitle, yTitle)
                        document.getElementById("sensorDetailsModal").showModal()
                    }
                } 
@@ -86,8 +86,7 @@ function Plot(container, data){
             }]
         })
     }
-    this.humanPlot = (title, subtitle, xTitle, yTitle) => {
-        this.correction = 0
+    this.humanPlot = (container, title, subtitle, xTitle, yTitle) => {
         this.chart = Highcharts.stockChart(container, {
             chart: {
                 
@@ -155,6 +154,9 @@ function Plot(container, data){
                     }
                 }]
             },
+            tooltip: {
+                enabled: false
+            },
             legend: {
                 enabled: false
             },
@@ -164,6 +166,22 @@ function Plot(container, data){
                 data: this.data
             }]
         })
+
+        if(sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"] !== undefined){
+            let chart = this.chart;
+            let yaxis = chart.yAxis[0];
+            yaxis.addPlotLine({
+                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"],
+                color: 'red',
+                width: 2,
+                zIndex: 9999,
+                id: 'horizLine',
+                label: {
+                    align: 'right',
+                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"]
+                }
+            });
+        }
         document.getElementById(container).onmousemove = (e) => {                  //plot garis horizontal ketika mouse bergerak
             var chart = this.chart;
             e = chart.pointer.normalize(e);
@@ -184,20 +202,21 @@ function Plot(container, data){
             });
         }
         document.getElementById(container).onclick = (e) => {                  //plot garis horizontal ketika mouse bergerak
-            var chart = this.chart;
+            let chart = this.chart;
             e = chart.pointer.normalize(e);
-            var yaxis = chart.yAxis[0];
+            let yaxis = chart.yAxis[0];
             yaxis.removePlotLine('horizLine');
-            var y = yaxis.toValue(e.chartY, false);
+            let y = yaxis.toValue(e.chartY, false);
+            this.correction = y.toFixed(4)
             yaxis.addPlotLine({
-                value: y,
+                value: this.correction,
                 color: 'red',
                 width: 2,
                 zIndex: 9999,
                 id: 'horizLine',
                 label: {
                     align: 'right',
-                    text: y.toFixed(4)
+                    text: this.correction
                 }
             });
         }
