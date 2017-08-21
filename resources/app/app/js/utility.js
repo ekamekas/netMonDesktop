@@ -6,17 +6,16 @@ function Utility(){
   https = require('https')
 
   this.getXML = function (path, callback) {
-
     'use strict';
     'use esversion:6'
 
     let parser = new xml2js.Parser();
-
     path = url.parse(path)
 
+    console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
     // Check if parameter is file or http request, assume localfile if protocol is null
     if(path.protocol == "file:" || path.protocol == null){
-      console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
+      
       fs.readFile(decodeURI(path.pathname), function(err, data) {
           parser.parseString(data, function (err, result) {
               if(callback !== undefined){
@@ -26,10 +25,7 @@ function Utility(){
           });
       });
     } else if(path.protocol == "http:" || path.protocol == "https:"){
-      console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
-
       parser.on('error', function(err) { console.log('Parser error', err); });
-
       let request = require('request');
       let agentOptions;
       let agent;
@@ -72,29 +68,38 @@ function Utility(){
     })
   }
 
-  this.getJSON = function(url, callback) {
-    let request = require('request');
-    let agentOptions;
-    let agent;
+  this.getJSON = function(path, callback) {
+     console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
+     path = url.parse(path)
+     if(path.protocol == "file:" || path.protocol == null){
+      fs.readFile(decodeURI(path.pathname), function(err, data) {
+        console.log(data)
+          callback(JSON.parse(data))
+      });
+    } else if(path.protocol == "http:" || path.protocol == "https:"){
+      let request = require('request');
+      let agentOptions;
+      let agent;
 
-    agentOptions = {
-      host: '123.231.138.149',
-      port: '443',
-      path: '/',
-      rejectUnauthorized: false
-    };
-    agent = new https.Agent(agentOptions);
+      agentOptions = {
+        host: '123.231.138.149',
+        port: '443',
+        path: '/',
+        rejectUnauthorized: false
+      };
+      agent = new https.Agent(agentOptions);
 
-    request({
-      url: url,
-      method: 'GET',
-      agent: agent
-      }, function (err, resp, body) {
-      if (resp.statusCode >= 200 && resp.statusCode < 400) {
-        callback(JSON.parse(body))
+      request({
+        url: url,
+        method: 'GET',
+        agent: agent
+        }, function (err, resp, body) {
+        if (resp.statusCode >= 200 && resp.statusCode < 400) {
+          callback(JSON.parse(body))
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   // Exporting to spreadsheet-xml format

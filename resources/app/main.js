@@ -8,7 +8,8 @@ function createWindow(){
   win = new BrowserWindow({
     width:800, 
     height:800, 
-    title:"customPRTGDesktop"
+    title:"customPRTGDesktop",
+    fullscreen:true
   });
   
   win.loadURL(url.format({

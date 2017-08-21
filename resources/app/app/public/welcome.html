@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="../js/utility.js"></script>
+    <script type="text/javascript" src="../js/dataStatistic.js"></script>
+    <script type="text/javascript" src="../js/plot.js"></script>
+    <script type="text/javascript" src="../js/dummy.js"></script>
     <link href="../css/photon.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/custom.css">
     <link rel="stylesheet" href="../css/clusterize.css">
@@ -39,7 +42,7 @@
       }
   </style>
   <script>
-    var {dialog} = require('electron').remote,
+    const {dialog} = require('electron').remote,
     clusterizejs = require('clusterize.js')
   </script>
   </head>
@@ -155,13 +158,13 @@
             </div>
           </div> 
         </div>
-        <div class="pane-sm sidebar" id="graph" style="display:block; min-width:30%; padding:2%">
-              <div style="min-height:40%;max-height:50%;border-bottom-style:solid;border-color:#666666">
-                <p>Graph 1</p>
-              </div>
-              <div style="min-height:40%;max-height:50%">
-                <p>Graph 2</p>
-              </div> 
+        <div class="pane-sm sidebar" style="display:block; min-width:30%; padding:2%">
+            <div id="graph" style="min-height:40%;max-height:50%;border-bottom-style:solid;border-color:#666666">
+              <p>Graph 1</p>
+            </div>
+            <div id="info" style="min-height:40%;max-height:50%">
+              <p>Info disini</p>
+            </div>
         </div>
       </div>
     </div>
@@ -184,7 +187,7 @@
         <input type="date" name="dateTo" id="dateTo">
         <br><br>
         <label>Interval : </label><br>
-        <input type="text" name="interval" value="60" id="interval">
+        <input type="number" min="0" name="interval" value="60" id="interval">
       </form>
     </div>
     <footer class="toolbar toolbar-footer">
@@ -213,7 +216,7 @@
         <br>
         <input type="checkbox" name="peakSelect" value=true> Masukan data puncak  
       </form>
-      <span style="color:red">Warning : Fetching data with peaks will take vastly long, depends on connection</span>
+      <span style="color:red">Warning : Exporting data with peaks will take vastly long, depends on connection</span>
     </div>
     <footer class="toolbar toolbar-footer">
         <div class="toolbar-actions">
@@ -222,8 +225,30 @@
         </div>
     </footer>
   </dialog>
+  <dialog id="sensorDetailsModal">
+    <header class="toolbar toolbar-footer">
+      <h1 class="title">Nama Perangkat</h1>
+    </header>
+    <div style="width:90vw; height:90vh; padding:2%; display:block">
+      <div id="graph1">
+        
+      </div>
+      <div id="graph2">
+        
+      </div>
+    </div>
+    <footer class="toolbar toolbar-footer">
+        <div class="toolbar-actions">
+            <button onclick="document.getElementById('sensorDetailsModal').close()" class="btn btn-default pull-right">Tutup</button>
+        </div>
+    </footer>
+  </dialog>
   <script>
-    var sensors
+    var sensors, sensorDetails, trafficData
+    
+    // Plot
+    var plotGraph = new Plot(document.getElementById("graph"))
+    plotGraph.plot("Graph", "Informasi data sensor", "Waktu", "Data sensor")
 
     // Table data Clusterjs
     var data
@@ -236,7 +261,11 @@
     // dataModal listener
     document.getElementById("dataModal").onclose = (e) => {
       if(e.target.returnValue == "true"){
-        console.log(document.getElementById("dateFrom").value, "DateFrom")
+        // Possible input handler
+        if(document.getElementById("dateFrom").value == '' || document.getElementById("dateTo").value == '' || document.getElementById("interval").value == '' || (new Date(document.getElementById("dateFrom").value) > new Date() || new Date(document.getElementById("dateFrom").value) >= new Date(document.getElementById("dateTo").value)))
+          dialog.showErrorBox("Error", "Please complete the form")
+        else
+          console.log("ha")
       }
     }
     // exportModal listener
@@ -265,11 +294,13 @@
     document.getElementById('contentArea').onclick = function(e) {
       e = e || event;
       var target = e.target || e.srcElement;
-      console.log(e)
       if(target.parentElement.nodeName != 'TR') return;
-      document.getElementById("deviceNameModal").innerHTML = target.parentElement.children[0].innerHTML
-      document.getElementById("sensorNameModal").innerHTML = target.parentElement.children[1].innerHTML
-      document.getElementById("dataModal").showModal()
+      // Dummy input
+      plotGraph.data = dummy
+      plotGraph.chart.series[0].setData(dummy, true)
+      // document.getElementById("deviceNameModal").innerHTML = target.parentElement.children[0].innerHTML
+      // document.getElementById("sensorNameModal").innerHTML = target.parentElement.children[1].innerHTML
+      // document.getElementById("dataModal").showModal()
     }
     // Export listener
     document.getElementById("export").onclick = () => {
@@ -278,7 +309,6 @@
       else 
         dialog.showErrorBox("No data", "Get data from left sidebar")
     }
-    
     document.getElementById("saveFile").onclick = () => {
       dialog.showSaveDialog({filters:[{name:'XML File', extensions: ['xml']}, {name:'others', extensions:['*']}]},(filename) => {
         if(filename === undefined)
