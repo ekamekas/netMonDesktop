@@ -9,6 +9,8 @@ function createWindow(){
     width:800, 
     height:800, 
     title:"customPRTGDesktop",
+    backgroundColor: '#312450',
+    show: false,
     fullscreen:true
   });
   
@@ -18,8 +20,10 @@ function createWindow(){
     slashes: true
   }))
 
-  win.webContents.openDevTools();
-
+  // win.webContents.openDevTools();
+  win.once("ready-to-show", () => {
+    win.show()
+  })
   win.on("closed", () => {
     win = null;
   })

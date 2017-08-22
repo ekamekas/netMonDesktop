@@ -5,13 +5,23 @@ var Highcharts = require('highcharts/highstock')
 require('highcharts/modules/exporting')(Highcharts)
 
 // Data must be arrays of x and y
-function Plot(data){
+function Plot(data, legend){
     let color = '#3F51B5';
     let rgba = new Highcharts.Color(color).setOpacity(0.66).get();
     this.data = data
     if(this.data === undefined || this.data === null)
         this.data = []
     this.correction
+    this.addSeries = (chart, data, name, type) => {
+        chart.addSeries({
+            name: name,
+            type: type,
+            data: data
+        }, false)
+    }
+    this.redraw = (chart) => {
+        chart.redraw()
+    }
     this.plot = (container, title, subtitle, xTitle, yTitle) => {
         this.chart = Highcharts.chart(container, {
             chart: {
@@ -19,9 +29,13 @@ function Plot(data){
                    click: () => {
                        if(this.data.length == 0) return
                        this.humanPlot("graph1", title, subtitle, xTitle, yTitle)
+                       for(let i = 0; i < this.data.length; i++){
+                           this.addSeries(this.chart, this.data[i], "Val", "line")
+                       }
+                       this.redraw(this.chart)
                        document.getElementById("sensorDetailsModal").showModal()
                    }
-               } 
+               }
             },
             title: {
                 text: title
@@ -57,9 +71,6 @@ function Plot(data){
                             [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
                         ]
                     },
-                    marker: {
-                        enabled: false
-                    },
                     lineWidth: 1,
                     states: {
                         hover: {
@@ -67,6 +78,16 @@ function Plot(data){
                         }
                     },
                     threshold: null
+                },
+                series: {
+                    allowPointSelect : true,
+                    marker: {
+                        states: {
+                            hover: {
+                                enabled: false
+                            }
+                        }
+                    }
                 }
             },
             lang: {
@@ -78,12 +99,7 @@ function Plot(data){
                     fontSize: '1em',
                     color: '#303030'
                 }
-            },
-            series: [{
-                type: 'area',
-                name: 'Data',
-                data: this.data
-            }]
+            }
         })
     }
     this.humanPlot = (container, title, subtitle, xTitle, yTitle) => {
@@ -159,26 +175,21 @@ function Plot(data){
             },
             legend: {
                 enabled: false
-            },
-            series: [{
-                type: 'area',
-                name: 'Data',
-                data: this.data
-            }]
+            }
         })
 
-        if(sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"] !== undefined){
+        if(sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0] !== undefined){
             let chart = this.chart;
             let yaxis = chart.yAxis[0];
             yaxis.addPlotLine({
-                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"],
+                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0],
                 color: 'red',
                 width: 2,
                 zIndex: 9999,
                 id: 'horizLine',
                 label: {
                     align: 'right',
-                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["correction"]
+                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0]
                 }
             });
         }
@@ -207,16 +218,16 @@ function Plot(data){
             let yaxis = chart.yAxis[0];
             yaxis.removePlotLine('horizLine');
             let y = yaxis.toValue(e.chartY, false);
-            this.correction = y.toFixed(4)
+            sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0] = y.toFixed(4)
             yaxis.addPlotLine({
-                value: this.correction,
+                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0],
                 color: 'red',
                 width: 2,
                 zIndex: 9999,
                 id: 'horizLine',
                 label: {
                     align: 'right',
-                    text: this.correction
+                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0]
                 }
             });
         }

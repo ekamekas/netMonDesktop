@@ -254,7 +254,7 @@
     </footer>
   </dialog>
   <script>
-    var sensors, sensorDetails, trafficData
+    var sensors, sensorDetails
     
     // Plot
     var plotGraph = new Plot()
@@ -306,15 +306,52 @@
     // Click listeners
     // Listener table data
     document.getElementById('contentArea').onclick = function(e) {
+      // Prevent data stack
+      plotGraph.chart.destroy()
+      plotGraph.plot(document.getElementById("graph"), "Graph", "Informasi data sensor", "Waktu", "Data sensor")
       e = e || event;
       let target = e.target || e.srcElement;
-      console.log(target.parentElement.getAttribute("data-index"))
       let rowIndex = target.parentElement.getAttribute("data-index")
       if(target.parentElement.nodeName != 'TR') return;
-      // Dummy input
-      plotGraph.data = dummy
-      plotGraph.chart.series[0].setData(dummy, true)
-      document.getElementById("sensorDetailsModal").setAttribute("data-index", rowIndex)
+      if(sensors.item[rowIndex]["peaks"] === undefined)
+        sensors.item[rowIndex]["peaks"] = {"95e":[], "cluster":[], "correction":[]}
+      // Historic data input
+      new Utility().getXML("file:F:/historicdata.xml", (result) => {
+        result = result.histdata
+        let data = []
+        let trafficData = []
+        // Initiate arrays
+        for(let i = 0; i < result.item[0].value_raw.length; i++){
+          data.push([])
+          trafficData.push([])
+        }
+        // Build data array for graph
+        for(let i = 0; i < result.$.totalcount; i++){
+
+          // Using GMT+7 dengan format datetime MM/DD/YYYY HH:MM:SS - HH:MM:SS
+          let datetime = result.item[i]["datetime"][0].split("-")[0]
+          datetime = new Date(datetime).getTime() + 25200000
+          // Get data for each channel
+          for(let j = 0; j < result.item[i].value_raw.length; j++){
+            if(result.item[i].value_raw[j] !== undefined)
+              data[j].push([datetime,parseInt(result.item[i].value_raw[j]._)])
+              // Get data for 95e and clustering
+              if(result.item[i].value_raw[j].$.channel.toLowerCase().indexOf("traffic") == 0){
+                trafficData[j].push(parseInt(result.item[i].value_raw[j]._))
+              }
+          }
+        }
+        plotGraph.data = data
+        for(let i = 0; i < result.item[0].value_raw.length; i++){
+          if(trafficData[i].length !== 0){
+            sensors.item[rowIndex]["peaks"]["95e"].push(new DataStatistic(trafficData[i]).percentil(95))
+            sensors.item[rowIndex]["peaks"]["cluster"].push(new DataStatistic(trafficData[i]).percentil(95))
+          }
+          plotGraph.addSeries(plotGraph.chart, data[i], "Value1", "line")
+        }
+        plotGraph.redraw(plotGraph.chart)
+        document.getElementById("sensorDetailsModal").setAttribute("data-index", rowIndex)
+      })
       // document.getElementById("deviceNameModal").innerHTML = target.parentElement.children[0].innerHTML
       // document.getElementById("sensorNameModal").innerHTML = target.parentElement.children[1].innerHTML
       // document.getElementById("dataModal").showModal()
@@ -349,7 +386,6 @@
           if(sensors.$.totalcount != 0){
             for(let i = 0; i < sensors.item.length; i++){
               if(sensors.item[i].device != ""){
-                // data.push('<tr><td>' + sensors.item[i].group + '</td><td>' + sensors.item[i].sensor + '</td<td>' + sensors.item[i].objid + '</td><td>' + i + '</td></tr>')
                 data.push('<tr data-index=' + i + '><td class="deviceTable overflowText">' + sensors.item[i].device + '</td><td class="sensorTable overflowText">' + sensors.item[i].sensor + '</td><td class="typeTable overflowText">' + sensors.item[i].type + '</td><td class="statusTable overflowText">' + sensors.item[i].status + '</td></tr>')
               }
             }
