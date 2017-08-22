@@ -9,6 +9,7 @@ function Plot(data, legend){
     let color = '#3F51B5';
     let rgba = new Highcharts.Color(color).setOpacity(0.66).get();
     this.data = data
+    this.channel = -1
     if(this.data === undefined || this.data === null)
         this.data = []
     this.correction
@@ -103,6 +104,30 @@ function Plot(data, legend){
         })
     }
     this.humanPlot = (container, title, subtitle, xTitle, yTitle) => {
+        let yAxis = {}
+        if(this.channel != -1){
+            yAxis = {
+                plotLines: [{                                   //plot titik estimasi 95e
+                    color: rgba,
+                    dashStyle: 'LongDash',
+                    width: 2,
+                    value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["95e"][this.channel],                                //nilai estimasi 95e
+                    id: '95e',
+                    label: {
+                        text: '95e'
+                    }
+                }, {                                            //plot titik estimasi cluster
+                    color: rgba,
+                    dashStyle: 'LongDash',
+                    width: 2,
+                    value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["cluster"][this.channel],                                //nilai estimasi cluster
+                    id: 'cluster',
+                    label: {
+                        text: 'cluster'
+                    }
+                }]
+            }
+        }
         this.chart = Highcharts.stockChart(container, {
             chart: {
                 
@@ -149,27 +174,7 @@ function Plot(data, legend){
             xAxis: {
                 type: 'datetime'
             },
-            yAxis: {
-                plotLines: [{                                   //plot titik estimasi 95e
-                    color: rgba,
-                    dashStyle: 'LongDash',
-                    width: 2,
-                    value: 0.9,                                //nilai estimasi 95e
-                    id: '95e',
-                    label: {
-                        text: '95e'
-                    }
-                }, {                                            //plot titik estimasi cluster
-                    color: rgba,
-                    dashStyle: 'LongDash',
-                    width: 2,
-                    value: 0.8,                                //nilai estimasi cluster
-                    id: 'cluster',
-                    label: {
-                        text: 'cluster'
-                    }
-                }]
-            },
+            yAxis: yAxis,
             tooltip: {
                 enabled: false
             },
@@ -178,18 +183,18 @@ function Plot(data, legend){
             }
         })
 
-        if(sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0] !== undefined){
+        if(this.channel != -1){
             let chart = this.chart;
             let yaxis = chart.yAxis[0];
             yaxis.addPlotLine({
-                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0],
+                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][this.channel],
                 color: 'red',
                 width: 2,
                 zIndex: 9999,
                 id: 'horizLine',
                 label: {
                     align: 'right',
-                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0]
+                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][this.channel]
                 }
             });
         }
@@ -218,16 +223,17 @@ function Plot(data, legend){
             let yaxis = chart.yAxis[0];
             yaxis.removePlotLine('horizLine');
             let y = yaxis.toValue(e.chartY, false);
-            sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0] = y.toFixed(4)
+            if(this.channel != -1)
+                sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][this.channel] = y.toFixed(4)
             yaxis.addPlotLine({
-                value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0],
+                value: y.toFixed(4),
                 color: 'red',
                 width: 2,
                 zIndex: 9999,
                 id: 'horizLine',
                 label: {
                     align: 'right',
-                    text: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["correction"][0]
+                    text: y.toFixed(4)
                 }
             });
         }

@@ -243,6 +243,9 @@
       <div id="graph1">
         
       </div>
+      <select class="btn btn-default btn-dropdown" id="graphChannels">
+          <option data-channel="-1">Semua</option>
+      </select>
       <div id="graph2">
         
       </div>
@@ -254,8 +257,9 @@
     </footer>
   </dialog>
   <script>
-    var sensors, sensorDetails
-    
+
+    var sensors, sensorDetails, plotData, trafficData
+
     // Plot
     var plotGraph = new Plot()
     plotGraph.plot(document.getElementById("graph"), "Graph", "Informasi data sensor", "Waktu", "Data sensor")
@@ -306,6 +310,8 @@
     // Click listeners
     // Listener table data
     document.getElementById('contentArea').onclick = function(e) {
+      plotData = []
+      trafficData = []
       // Prevent data stack
       plotGraph.chart.destroy()
       plotGraph.plot(document.getElementById("graph"), "Graph", "Informasi data sensor", "Waktu", "Data sensor")
@@ -318,11 +324,17 @@
       // Historic data input
       new Utility().getXML("file:F:/historicdata.xml", (result) => {
         result = result.histdata
-        let data = []
-        let trafficData = []
+        if(result.item[0].value_raw === undefined) return;
         // Initiate arrays
+        document.getElementById("graphChannels").innerHTML = '<option data-channel="-1">Semua</option>'
         for(let i = 0; i < result.item[0].value_raw.length; i++){
-          data.push([])
+          let element = document.createElement("option")
+          element.setAttribute("data-channel", i)
+          element.value = result.item[0].value_raw[i].$.channel
+          element.innerHTML = result.item[0].value_raw[i].$.channel
+          element.onclick = 'console.log("hello")'
+          document.getElementById("graphChannels").appendChild(element)
+          plotData.push([])
           trafficData.push([])
         }
         // Build data array for graph
@@ -334,20 +346,20 @@
           // Get data for each channel
           for(let j = 0; j < result.item[i].value_raw.length; j++){
             if(result.item[i].value_raw[j] !== undefined)
-              data[j].push([datetime,parseInt(result.item[i].value_raw[j]._)])
+            plotData[j].push([datetime,parseInt(result.item[i].value_raw[j]._)])
               // Get data for 95e and clustering
               if(result.item[i].value_raw[j].$.channel.toLowerCase().indexOf("traffic") == 0){
                 trafficData[j].push(parseInt(result.item[i].value_raw[j]._))
               }
           }
         }
-        plotGraph.data = data
+        plotGraph.data = plotData
         for(let i = 0; i < result.item[0].value_raw.length; i++){
           if(trafficData[i].length !== 0){
             sensors.item[rowIndex]["peaks"]["95e"].push(new DataStatistic(trafficData[i]).percentil(95))
             sensors.item[rowIndex]["peaks"]["cluster"].push(new DataStatistic(trafficData[i]).percentil(95))
           }
-          plotGraph.addSeries(plotGraph.chart, data[i], "Value1", "line")
+          plotGraph.addSeries(plotGraph.chart, plotData[i], result.item[0].value_raw[i].$.channel, "line")
         }
         plotGraph.redraw(plotGraph.chart)
         document.getElementById("sensorDetailsModal").setAttribute("data-index", rowIndex)
@@ -355,6 +367,23 @@
       // document.getElementById("deviceNameModal").innerHTML = target.parentElement.children[0].innerHTML
       // document.getElementById("sensorNameModal").innerHTML = target.parentElement.children[1].innerHTML
       // document.getElementById("dataModal").showModal()
+    }
+    // Channel graph listener
+    document.getElementById("graphChannels").onchange = (e) => {
+      let channelIndex = document.getElementById("graphChannels").selectedIndex - 1
+      let channelName = document.getElementById("graphChannels").value
+      console.log(channelIndex)
+      // Kondisional dalam plot.js
+      plotGraph.channel = channelIndex
+      plotGraph.humanPlot("graph1", "Graph", "Informasi data sensor", "Waktu", "Data sensor")
+      if(channelIndex == -1){
+        for(let i = 0; i < plotData.length; i++){
+          plotGraph.addSeries(plotGraph.chart, plotData[i], document.getElementById("graphChannels").getElementsByTagName("option")[i + 1], "line")
+        }
+      } else {
+        plotGraph.addSeries(plotGraph.chart, plotData[channelIndex], channelName, "line")
+      }
+      plotGraph.redraw(plotGraph.chart)
     }
     // Export listener
     document.getElementById("export").onclick = () => {
