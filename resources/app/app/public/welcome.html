@@ -213,7 +213,9 @@
     <div style="padding:50px">
       <form>
         <div id="columnExport" style="display:inline-block;width:100%">
+            <input type="checkbox" name="peakSelect" value=group> Group
           <input type="checkbox" name="peakSelect" value=device> Device
+          <input type="checkbox" name="peakSelect" value=type> Type
           <input type="checkbox" name="peakSelect" value=sensor> Sensor
           <input type="checkbox" name="peakSelect" value=host> IP Address
           <input type="checkbox" name="peakSelect" value=status> Status
@@ -224,7 +226,7 @@
         <input style="width:80%" type="text" id="savePath" placeholder="" disabled>
         <button style="width:15%" type="button" id="saveFile" >Save file</button>
         <br>
-        <input type="checkbox" name="peakSelect" value=true> Masukan data puncak  
+        <input type="checkbox" id="includePeaks" value=peaks> Masukan data puncak  
       </form>
       <span style="color:red">Warning : Exporting data with peaks will take vastly long, depends on connection</span>
     </div>
@@ -255,6 +257,18 @@
             <button onclick="document.getElementById('sensorDetailsModal').close()" class="btn btn-default pull-right">Tutup</button>
         </div>
     </footer>
+  </dialog>
+  <dialog id="waitingModal" style="width:60%">
+      <div id="waitingProgress" style="width: 100%;background-color: grey;">
+        <div id="progressBar" style="width: 1%;height: 30px;background-color: green;text-align: center;line-height: 30px;color:width"></div>
+      </div>
+      <script>
+        function updateBar(percentage){
+          var elem = document.getElementById("progressBar"); 
+          elem.style.width = percentage + '%'; 
+          elem.innerHTML = percentage * 1 + '%';
+        }
+      </script>
   </dialog>
   <script>
 
@@ -293,12 +307,97 @@
             if(document.getElementById("columnExport").getElementsByTagName("input")[input].checked)
               columns.push(document.getElementById("columnExport").getElementsByTagName("input")[input].value)
           }
-          new Utility().writeSpreadsheet(sensors.item, columns, document.getElementById("savePath").placeholder, undefined, (path) => {
-            if(path !== undefined)
-              alert(path, "Berhasil")
-            else 
-              alert("Gagal")
-          })
+          // Fetch All data if checked the checkbox
+          // Only Traffic data will be fetch and calculate
+          if(document.getElementById("includePeaks").checked){
+            var async = require('async')
+            let index = 0;
+            document.getElementById("waitingModal").showModal()
+            async.eachSeries(sensors.item, 
+            //Item is the current item being iterated over,
+            //callback is the callback you call to finish the current iteration, it accepts an error and result parameter callback(error, result);
+            function (item, callback) {
+                  updateBar(Math.ceil(100 * index/sensors.$.totalcount))
+                  new Utility().getXML("file:F:/historicdata.xml", (result) => {
+                        trafficData = [] 
+                        result = result.histdata
+                        for(let j = 0; j < result.item[0].value_raw.length; j++){
+                          trafficData.push([])
+                        }
+                        if(result === undefined || result.item[0].value_raw === undefined) return;
+                        for(let i = 0; i < result.$.totalcount; i++){
+                        let cont = false
+                          for(let j = 0; j < result.item[i].value_raw.length; j++){
+                            if(result.item[i].value_raw[j] !== undefined && result.item[i].value_raw[j].$.channel.search(/traffic/i) != -1){
+                            // Dibagi 1048576 agar menjadi MByte
+                            // Get data for 95e and clustering
+                              trafficData[j].push(parseInt(result.item[i].value_raw[j]._/1048576))
+                              cont = true
+                            }
+                          }
+                        if(!cont)
+                          break
+                        }
+                        if(trafficData.length != 0 && sensors.item[index]["peaks"] === undefined)
+                          sensors.item[index]["peaks"] = {"95e":[], "cluster":[], "correction":[]}
+                        for(let j = 0; j < result.item[0].value_raw.length; j++){
+                          if(trafficData[j].length != 0){
+                            sensors.item[index]["peaks"]["95e"].push(new DataStatistic(trafficData[j]).percentil(95))
+                            sensors.item[index]["peaks"]["cluster"].push(new DataCluster().findDominanPeak(trafficData[j]))
+                          }
+                        }
+                        index++
+                      //Check for any errors...     
+                      // if (error) return callback(error);
+                      callback(null);
+                  });
+            },
+            function (err, result) {
+                  //You've now finished the loop
+                  document.getElementById("waitingModal").close()
+                  if (err) {
+                    //Do something, you passed an error object to
+                    //in one of the loop's iterations
+                  }
+
+                  columns.push("Traffic In (Mbit/s)")
+                  columns.push("Traffic Out (Mbit/s)")
+                  new Utility().writeSpreadsheet(sensors.item, columns, document.getElementById("savePath").placeholder, undefined, (path) => {
+                    if(path !== undefined)
+                      alert(path, "Berhasil")
+                    else 
+                      alert("Gagal")
+                  })
+            });
+            // for(let i = 0; i < sensors.$.totalcount; i++){
+              // new Utility().getXML("file:F:/historicdata.xml", (result) => {
+              //   result = result.histdata
+              //   // if(i == 0)
+              //     console.log(result)
+              //   if(result === undefined || result.item[0].value_raw === undefined) return;
+              //   for(let k = 0; k < result.$.totalcount; k++){
+              //   let cont = false
+              //     for(let j = 0; j < result.item[k].value_raw.length; j++){
+              //       if(result.item[k].value_raw[j] !== undefined && result.item[k].value_raw[j].$.channel.search(/traffic/i) != -1){
+              //       // Dibagi 1048576 agar menjadi MByte
+              //       // Get data for 95e and clustering
+              //         trafficData[j].push(parseInt(result.item[k].value_raw[j]._/1048576))
+              //         cont = true
+              //       }
+              //     }
+              //   if(!cont)
+              //     break
+              //   }
+              //   // for(let j = 0; j < result.item[0].value_raw.length; j++){
+              //   //   if(trafficData[j].length !== 0){
+              //   //     sensors.item[i]["peaks"]["95e"].push(new DataStatistic(trafficData[j]).percentil(95))
+              //   //     sensors.item[i]["peaks"]["cluster"].push(new DataCluster().findDominanPeak(trafficData[j]))
+              //   //   }
+              //   // }
+              // })
+            // }
+          }
+          
         }
       }
     }
@@ -346,10 +445,11 @@
           // Get data for each channel
           for(let j = 0; j < result.item[i].value_raw.length; j++){
             if(result.item[i].value_raw[j] !== undefined)
-            plotData[j].push([datetime,parseInt(result.item[i].value_raw[j]._)])
+            // Dibagi 1048576 agar menjadi MByte
+            plotData[j].push([datetime,parseInt(result.item[i].value_raw[j]._/1048576)])
               // Get data for 95e and clustering
-              if(result.item[i].value_raw[j].$.channel.toLowerCase().indexOf("traffic") == 0){
-                trafficData[j].push(parseInt(result.item[i].value_raw[j]._))
+              if(result.item[i].value_raw[j].$.channel.search(/traffic/i) != -1){
+                trafficData[j].push(parseInt(result.item[i].value_raw[j]._/1048576))
               }
           }
         }
@@ -357,10 +457,11 @@
         for(let i = 0; i < result.item[0].value_raw.length; i++){
           if(trafficData[i].length !== 0){
             sensors.item[rowIndex]["peaks"]["95e"].push(new DataStatistic(trafficData[i]).percentil(95))
-            sensors.item[rowIndex]["peaks"]["cluster"].push(new DataStatistic(trafficData[i]).percentil(95))
+            sensors.item[rowIndex]["peaks"]["cluster"].push(new DataCluster().findDominanPeak(trafficData[i]))
           }
           plotGraph.addSeries(plotGraph.chart, plotData[i], result.item[0].value_raw[i].$.channel, "line")
         }
+        plotGraph.chart.setTitle({text: sensors.item[rowIndex]["device"]}, {text: sensors.item[rowIndex]["sensor"]});
         plotGraph.redraw(plotGraph.chart)
         document.getElementById("sensorDetailsModal").setAttribute("data-index", rowIndex)
       })
@@ -372,7 +473,6 @@
     document.getElementById("graphChannels").onchange = (e) => {
       let channelIndex = document.getElementById("graphChannels").selectedIndex - 1
       let channelName = document.getElementById("graphChannels").value
-      console.log(channelIndex)
       // Kondisional dalam plot.js
       plotGraph.channel = channelIndex
       plotGraph.humanPlot("graph1", "Graph", "Informasi data sensor", "Waktu", "Data sensor")

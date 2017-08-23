@@ -6,8 +6,6 @@ require('highcharts/modules/exporting')(Highcharts)
 
 // Data must be arrays of x and y
 function Plot(data, legend){
-    let color = '#3F51B5';
-    let rgba = new Highcharts.Color(color).setOpacity(0.66).get();
     this.data = data
     this.channel = -1
     if(this.data === undefined || this.data === null)
@@ -24,19 +22,32 @@ function Plot(data, legend){
         chart.redraw()
     }
     this.plot = (container, title, subtitle, xTitle, yTitle) => {
+        document.getElementById("graph").onclick = () => {
+            if(this.data.length == 0) return
+            this.humanPlot("graph1", this.chart.title.textStr[0], plotGraph.chart.subtitle.textStr[0], xTitle, yTitle)
+            this.channel = -1
+            document.getElementById("graphChannels").selectedIndex = this.channel + 1
+            for(let i = 0; i < this.data.length; i++){
+                this.addSeries(this.chart, this.data[i], document.getElementById("graphChannels").getElementsByTagName("option")[i + 1], "line")
+            }
+            this.redraw(this.chart)
+            document.getElementById("sensorDetailsModal").showModal()
+        }
         this.chart = Highcharts.chart(container, {
             chart: {
-               events: {
-                   click: () => {
-                       if(this.data.length == 0) return
-                       this.humanPlot("graph1", title, subtitle, xTitle, yTitle)
-                       for(let i = 0; i < this.data.length; i++){
-                           this.addSeries(this.chart, this.data[i], "Val", "line")
-                       }
-                       this.redraw(this.chart)
-                       document.getElementById("sensorDetailsModal").showModal()
-                   }
-               }
+            //    events: {
+            //        click: () => {
+            //            if(this.data.length == 0) return
+            //            this.humanPlot("graph1", title, subtitle, xTitle, yTitle)
+            //            this.channel = -1
+            //            document.getElementById("graphChannels").selectedIndex = this.channel + 1
+            //            for(let i = 0; i < this.data.length; i++){
+            //                this.addSeries(this.chart, this.data[i], document.getElementById("graphChannels").getElementsByTagName("option")[i + 1], "line")
+            //            }
+            //            this.redraw(this.chart)
+            //            document.getElementById("sensorDetailsModal").showModal()
+            //        }
+            //    }
             },
             title: {
                 text: title
@@ -104,11 +115,11 @@ function Plot(data, legend){
         })
     }
     this.humanPlot = (container, title, subtitle, xTitle, yTitle) => {
-        let yAxis = {}
+        let yAxis = {}, legend = {enabled:false}
         if(this.channel != -1){
             yAxis = {
                 plotLines: [{                                   //plot titik estimasi 95e
-                    color: rgba,
+                    color: new Highcharts.Color('#3F51B5').setOpacity(0.66).get(),
                     dashStyle: 'LongDash',
                     width: 2,
                     value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["95e"][this.channel],                                //nilai estimasi 95e
@@ -117,7 +128,7 @@ function Plot(data, legend){
                         text: '95e'
                     }
                 }, {                                            //plot titik estimasi cluster
-                    color: rgba,
+                    color: new Highcharts.Color('#ff6f00').setOpacity(0.66).get(),
                     dashStyle: 'LongDash',
                     width: 2,
                     value: sensors.item[document.getElementById("sensorDetailsModal").getAttribute("data-index")]["peaks"]["cluster"][this.channel],                                //nilai estimasi cluster
@@ -127,13 +138,19 @@ function Plot(data, legend){
                     }
                 }]
             }
+            legend = {
+                enabled : true
+            }
         }
         this.chart = Highcharts.stockChart(container, {
             chart: {
                 
             },
             title: {
-                text: 'Data sensor terhadap waktu'
+                text: title
+            },
+            subtitle: {
+                text: subtitle
             },
             plotOptions: {
                 area: {
@@ -178,9 +195,7 @@ function Plot(data, legend){
             tooltip: {
                 enabled: false
             },
-            legend: {
-                enabled: false
-            }
+            legend: legend
         })
 
         if(this.channel != -1){

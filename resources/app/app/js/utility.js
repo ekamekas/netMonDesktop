@@ -12,7 +12,7 @@ function Utility(){
     let parser = new xml2js.Parser();
     path = url.parse(path)
 
-    console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
+    // console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
     // Check if parameter is file or http request, assume localfile if protocol is null
     if(path.protocol == "file:" || path.protocol == null){
       
@@ -20,7 +20,7 @@ function Utility(){
           parser.parseString(data, function (err, result) {
               if(callback !== undefined){
                 callback(result)
-                console.log("Done")
+                // console.log("Done")
               }
           });
       });
@@ -47,7 +47,7 @@ function Utility(){
             parser.parseString(body, function(err, result) {
               if(callback !== undefined){
                 callback(result)
-                console.log("Done");
+                // console.log("Done");
               }
             })
           }
@@ -69,7 +69,7 @@ function Utility(){
   }
 
   this.getJSON = function(path, callback) {
-     console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
+    //  console.log("Waiting")  // Ganti dengan frontend popup-waiting-window
      path = url.parse(path)
      if(path.protocol == "file:" || path.protocol == null){
       fs.readFile(decodeURI(path.pathname), function(err, data) {
@@ -126,8 +126,8 @@ function Utility(){
             let cellData = rowData[i]
             if(cellData === undefined)
               cellData = ''
-            else
-              cellData = cellData[0]
+            // else
+            //   cellData = cellData[0]
             cell.push({
               "$":{
                 "ss:MergedDown":1
@@ -153,7 +153,7 @@ function Utility(){
       this.getXML(template, (result) => {
         console.log("Proses sedang berjalan");
         template = result
-        console.log(result)
+        // console.log(result)
         if(data !== undefined && data.length != 0){
           try{
             template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedRowCount"] = template.Workbook.Worksheet[0].Table[0].$["ss:ExpandedRowCount"] + data.length + 1   // Assign metadata of row counts (with header)
@@ -165,8 +165,32 @@ function Utility(){
             // Start loopy
             for(let i = 0; i < data.length; i++){
               let rowData = []
+              let dataTemp
               for (col = 0; col < columns.length; col++) {
-                rowData.push(data[i][columns[col]])
+                if(columns[col].search("Traffic In") != -1){
+                  // 5 adalah index array traffic ou (speed)
+                  if(data[i]["peaks"] === undefined)
+                    rowData.push("-")
+                  else {
+                    if(data[i]["peaks"]["correction"][3] === undefined)
+                      rowData.push(data[i]["peaks"]["cluster"][3])
+                    else
+                      rowData.push(data[i]["peaks"]["correction"][3])
+                  }
+                } else if(columns[col].search("Traffic Out") != -1) {
+                  // 5 adalah index array traffic ou (speed)
+                  if(data[i]["peaks"] === undefined)
+                    rowData.push("-")
+                  else {
+                    if(data[i]["peaks"]["correction"][5] === undefined)
+                      rowData.push(data[i]["peaks"]["cluster"][5])
+                    else
+                      rowData.push(data[i]["peaks"]["correction"][5]) 
+                  }
+                } else {
+                  dataTemp = (data[i][columns[col]]).toString().replace(/ <.*>/, '')
+                  rowData.push(dataTemp)
+                }
               }
               addRow(i + 1, rowData, template.Workbook.Worksheet[0].Table[0]["Row"])
             }
