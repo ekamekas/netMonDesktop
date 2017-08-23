@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test Login</title>
+  </head>
+<style>
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+</style>
+<body>
+
+<h2>Login</h2>
+
+<form>
+  <div class="container">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" id="uname" required>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" id="psw" required>
+    
+    <label><b>IP Address</b></label>
+    <input type="text" placeholder="Enter IP Address" id="ipadd" required>
+    
+    <button id="loginbtn" onclick="inputFunction()" value="login">Login</button>
+  </div>
+</form>
+
+<script type="text/javascript">
+    var hashedPassword = "", username = "", ipAddress = ""              //semua variable yang akan digunakan pada PRTG API
+    function inputFunction(){
+        var urlAccount = "http://" + document.getElementById("ipadd").value.toString() + "/api/getpasshash.htm?username=" + document.getElementById("uname").value.toString() + "&password=" + document.getElementById("psw").value.toString()
+        // alert(urlAccount)
+        getHashData(urlAccount, (result) => {
+            if (parseInt(result)%1 == 0){                               //login berhasil
+                hashedPassword = result
+                username = document.getElementById("uname").value.toString()
+                ipAddress = document.getElementById("ipadd").value.toString()
+                alert(hashedPassword + " " + username + " " + ipAddress)
+                /*tambah syntax untuk masuk ke aplikasi utama*/
+            } else{                                                     //login gagal
+                alert("Login gagal")
+            }
+        })
+    }
+
+    var http = require('http')                                          //ganti http menjadi https
+    function getHashData(theUrl, callback) {
+        let request = require('request');
+        let agentOptions;
+        let agent;
+
+        agentOptions = {
+          host: 'localhost',                                            //ganti localhost dengan document.getElementById("ipadd")
+          port: '80',                                                   //ganti 80 dengan 443
+          path: '/',
+          rejectUnauthorized: false
+        };
+        agent = new http.Agent(agentOptions);                           //ganti http dengan https
+
+        request({
+          url: theUrl,
+          method: 'GET',
+          agent: agent
+          }, function (err, resp, body) {
+            callback(body)
+          })
+    }
+
+    
+</script>
+</body>
+</html>
